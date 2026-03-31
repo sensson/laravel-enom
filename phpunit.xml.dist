@@ -20,9 +20,6 @@
             <directory>tests</directory>
             <exclude>tests/Integration</exclude>
         </testsuite>
-        <testsuite name="Integration">
-            <directory>tests/Integration</directory>
-        </testsuite>
     </testsuites>
     <logging>
         <junit outputFile="build/report.junit.xml"/>
