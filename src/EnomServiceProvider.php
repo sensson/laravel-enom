@@ -2,9 +2,9 @@
 
 namespace Sensson\Enom;
 
+use Sensson\Enom\Commands\EnomCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use Sensson\Enom\Commands\EnomCommand;
 
 class EnomServiceProvider extends PackageServiceProvider
 {
