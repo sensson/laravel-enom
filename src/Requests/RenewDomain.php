@@ -6,6 +6,8 @@ namespace Sensson\Enom\Requests;
 
 use Saloon\Enums\Method;
 use Saloon\Http\Request;
+use Saloon\Http\Response;
+use Sensson\Enom\Data\Domain;
 
 final class RenewDomain extends Request
 {
@@ -32,5 +34,13 @@ final class RenewDomain extends Request
             'TLD' => $this->tld,
             'NumYears' => $this->years,
         ];
+    }
+
+    public function createDtoFromResponse(Response $response): Domain
+    {
+        return new Domain(
+            sld: $this->sld,
+            tld: $this->tld,
+        );
     }
 }

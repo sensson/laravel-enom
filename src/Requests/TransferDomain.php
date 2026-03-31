@@ -6,6 +6,8 @@ namespace Sensson\Enom\Requests;
 
 use Saloon\Enums\Method;
 use Saloon\Http\Request;
+use Saloon\Http\Response;
+use Sensson\Enom\Data\DomainTransfer;
 
 final class TransferDomain extends Request
 {
@@ -33,5 +35,17 @@ final class TransferDomain extends Request
             'OrderType' => 'AutoVerification',
             'DomainPassword' => $this->code,
         ];
+    }
+
+    public function createDtoFromResponse(Response $response): DomainTransfer
+    {
+        $xml = $response->xml();
+
+        return new DomainTransfer(
+            sld: $this->sld,
+            tld: $this->tld,
+            order_id: (string) ($xml->OrderID ?? null) ?: null,
+            status_id: (string) ($xml->TransferOrder->statusid ?? null) ?: null,
+        );
     }
 }

@@ -6,7 +6,9 @@ namespace Sensson\Enom\Requests;
 
 use Saloon\Enums\Method;
 use Saloon\Http\Request;
+use Saloon\Http\Response;
 use Sensson\Enom\Data\Contact;
+use Sensson\Enom\Data\Domain;
 
 final class RegisterDomain extends Request
 {
@@ -46,5 +48,13 @@ final class RegisterDomain extends Request
             ->merge($tech->toQueryParams('Tech'))
             ->merge($billing->toQueryParams('AuxBilling'))
             ->all();
+    }
+
+    public function createDtoFromResponse(Response $response): Domain
+    {
+        return new Domain(
+            sld: $this->sld,
+            tld: $this->tld,
+        );
     }
 }

@@ -6,6 +6,8 @@ namespace Sensson\Enom\Requests;
 
 use Saloon\Enums\Method;
 use Saloon\Http\Request;
+use Saloon\Http\Response;
+use Sensson\Enom\Data\DomainAvailability;
 
 final class CheckDomain extends Request
 {
@@ -30,5 +32,16 @@ final class CheckDomain extends Request
             'SLD' => $this->sld,
             'TLD' => $this->tld,
         ];
+    }
+
+    public function createDtoFromResponse(Response $response): DomainAvailability
+    {
+        $xml = $response->xml();
+
+        return new DomainAvailability(
+            sld: $this->sld,
+            tld: $this->tld,
+            available: (int) $xml->RRPCode === 210,
+        );
     }
 }

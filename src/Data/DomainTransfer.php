@@ -6,14 +6,13 @@ namespace Sensson\Enom\Data;
 
 use Spatie\LaravelData\Data;
 
-final class Domain extends Data
+final class DomainTransfer extends Data
 {
     public function __construct(
         public readonly string $sld,
         public readonly string $tld,
-        public readonly ?string $status = null,
-        public readonly ?string $expiration = null,
-        public readonly ?bool $auto_renew = null,
+        public readonly ?string $order_id = null,
+        public readonly ?string $status_id = null,
     ) {
         //
     }
