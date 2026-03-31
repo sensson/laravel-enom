@@ -37,8 +37,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Sensson\\Enom\\": "src/",
-            "Sensson\\Enom\\Database\\Factories\\": "database/factories/"
+            "Sensson\\Enom\\": "src/"
         }
     },
     "autoload-dev": {
