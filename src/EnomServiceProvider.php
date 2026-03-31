@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Sensson\Enom;
 
-use Sensson\Enom\Commands\EnomCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
