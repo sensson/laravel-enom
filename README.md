@@ -40,16 +40,9 @@ A single domain is scoped through `Enom::domain($sld, $tld)`. Account-wide opera
 ```php
 use Sensson\Enom\Facades\Enom;
 
-// Check availability
 Enom::domain('example', 'com')->check();
-
-// Get domain info
 Enom::domain('example', 'com')->get();
-
-// List all domains in the account
 Enom::domains()->list();
-
-// Renew a domain
 Enom::domain('example', 'com')->renew(years: 2);
 ```
 
@@ -88,14 +81,11 @@ Enom::domain('example', 'com')->transfer('authorization-code');
 
 #### Lock and unlock
 
+Lock a domain to prevent unauthorized transfers, unlock before an outgoing transfer, and read the current status:
+
 ```php
-// Lock a domain to prevent unauthorized transfers
 Enom::domain('example', 'com')->lock();
-
-// Unlock before initiating an outgoing transfer
 Enom::domain('example', 'com')->unlock();
-
-// Get current lock status
 Enom::domain('example', 'com')->getLock();
 ```
 
@@ -104,7 +94,7 @@ Enom::domain('example', 'com')->getLock();
 ```php
 $authCode = Enom::domain('example', 'com')->getAuthCode();
 
-echo $authCode->code; // EPP-SECRET-123
+echo $authCode->code;
 ```
 
 #### Auto-renew
@@ -147,32 +137,29 @@ Available contact types: `Registrant`, `Admin`, `Tech`, `Billing`.
 ```php
 use Sensson\Enom\Data\Nameservers;
 
-// Get current nameservers
 $nameservers = Enom::domain('example', 'com')->nameservers()->get();
 
-// Update nameservers
 Enom::domain('example', 'com')->nameservers()->update(new Nameservers([
     'ns1.yourhost.com',
     'ns2.yourhost.com',
 ]));
 
-// Register a child nameserver (glue record)
 Enom::domain('example', 'com')->nameservers()->register('ns1.example.com', '1.2.3.4');
-
-// Delete a child nameserver
 Enom::domain('example', 'com')->nameservers()->delete('ns1.example.com');
 ```
 
+`register()` creates a child nameserver (glue record); `delete()` removes one.
+
 ### DNS records
+
+`update()` replaces all existing records for the domain:
 
 ```php
 use Sensson\Enom\Data\DnsRecord;
 use Sensson\Enom\Enums\DnsRecordType;
 
-// Get all DNS records
 $records = Enom::domain('example', 'com')->dns()->get();
 
-// Update DNS records (replaces all existing records)
 Enom::domain('example', 'com')->dns()->update([
     new DnsRecord(hostname: 'www', type: DnsRecordType::A, address: '1.2.3.4', ttl: 300),
     new DnsRecord(hostname: '@', type: DnsRecordType::MX, address: 'mail.example.com', ttl: 300, mx_preference: 10),
@@ -184,14 +171,12 @@ Available record types: `A`, `AAAA`, `CNAME`, `MX`, `NS`, `TXT`.
 
 ### Transfer tracking
 
+List all transfer orders for a domain, or look up and cancel an order by its ID:
+
 ```php
-// Get all transfer orders for a domain
 $orders = Enom::domain('example', 'com')->transfers()->list();
 
-// Get a transfer order by ID
 $order = Enom::transfers()->get('12345');
-
-// Cancel a transfer
 Enom::transfers()->cancel('12345');
 ```
 
@@ -200,8 +185,8 @@ Enom::transfers()->cancel('12345');
 ```php
 $balance = Enom::account()->balance();
 
-echo $balance->balance;   // 250.0
-echo $balance->currency;  // USD
+echo $balance->balance;
+echo $balance->currency;
 ```
 
 ## Testing
