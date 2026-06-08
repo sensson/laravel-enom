@@ -7,6 +7,7 @@ namespace Sensson\Enom;
 use Saloon\Http\Connector;
 use Saloon\Traits\Plugins\AcceptsJson;
 use Saloon\Traits\Plugins\AlwaysThrowOnErrors;
+use Sensson\Enom\Data\EnomCredentials;
 use Sensson\Enom\Resources\AccountResource;
 use Sensson\Enom\Resources\DomainResource;
 use Sensson\Enom\Resources\TransferResource;
@@ -17,16 +18,14 @@ final class Enom extends Connector
     use AlwaysThrowOnErrors;
 
     public function __construct(
-        protected readonly string $username,
-        protected readonly string $token,
-        protected readonly bool $sandbox = true,
+        protected readonly EnomCredentials $credentials,
     ) {
         //
     }
 
     public function resolveBaseUrl(): string
     {
-        return $this->sandbox
+        return $this->credentials->sandbox
             ? 'https://resellertest.enom.com'
             : 'https://reseller.enom.com';
     }
@@ -34,8 +33,8 @@ final class Enom extends Connector
     protected function defaultQuery(): array
     {
         return [
-            'UID' => $this->username,
-            'PW' => $this->token,
+            'UID' => $this->credentials->username,
+            'PW' => $this->credentials->token,
             'ResponseType' => 'xml',
         ];
     }

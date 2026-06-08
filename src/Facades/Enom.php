@@ -6,6 +6,7 @@ namespace Sensson\Enom\Facades;
 
 use Illuminate\Support\Facades\Facade;
 use Saloon\Http\Faking\MockClient;
+use Sensson\Enom\Data\EnomCredentials;
 use Sensson\Enom\Enom as EnomConnector;
 
 /** @see EnomConnector */
@@ -18,7 +19,7 @@ class Enom extends Facade
 
     public static function fake(MockClient $client): EnomConnector
     {
-        $connector = new EnomConnector('fake-user', 'fake-token');
+        $connector = new EnomConnector(new EnomCredentials('fake-user', 'fake-token'));
 
         static::swap($connector->withMockClient($client));
 
