@@ -33,19 +33,28 @@ Set `ENOM_SANDBOX=false` when you're ready to use the live environment.
 
 All resources are accessed through the `Enom` facade.
 
-### Check availability
+### Domains
 
 ```php
 use Sensson\Enom\Facades\Enom;
 
-$response = Enom::domains()->check('example', 'com');
+// Check availability
+Enom::domains()->check('example', 'com');
+
+// Get domain info
+Enom::domains()->get('example', 'com');
+
+// List all domains in the account
+Enom::domains()->list();
+
+// Renew a domain
+Enom::domains()->renew('example', 'com', years: 2);
 ```
 
-### Register a domain
+#### Register a domain
 
 ```php
 use Sensson\Enom\Data\Contact;
-use Sensson\Enom\Facades\Enom;
 
 $contact = new Contact(
     first_name: 'John',
@@ -69,30 +78,56 @@ You can provide separate contacts for admin, tech, and billing. If omitted, the 
 Enom::domains()->register('example', 'com', $registrant, admin: $admin, tech: $tech, billing: $billing, years: 2);
 ```
 
-### Get domain info
-
-```php
-Enom::domains()->get('example', 'com');
-```
-
-### Renew a domain
-
-```php
-Enom::domains()->renew('example', 'com', years: 2);
-```
-
-### Transfer a domain
+#### Transfer a domain in
 
 ```php
 Enom::domains()->transfer('example', 'com', 'authorization-code');
 ```
 
-### Contacts
-
-Get contacts for a domain:
+#### Lock and unlock
 
 ```php
-Enom::domains()->contacts('example', 'com')->get();
+// Lock a domain to prevent unauthorized transfers
+Enom::domains()->lock('example', 'com');
+
+// Unlock before initiating an outgoing transfer
+Enom::domains()->unlock('example', 'com');
+
+// Get current lock status
+Enom::domains()->getLock('example', 'com');
+```
+
+#### EPP / auth code (outgoing transfer)
+
+```php
+$authCode = Enom::domains()->getAuthCode('example', 'com');
+
+echo $authCode->code; // EPP-SECRET-123
+```
+
+#### Auto-renew
+
+```php
+Enom::domains()->setAutoRenew('example', 'com', true);
+
+$enabled = Enom::domains()->getAutoRenew('example', 'com');
+```
+
+#### Push to another account
+
+```php
+Enom::domains()->push('example', 'com', 'other-reseller-account');
+```
+
+### Contacts
+
+Get all contacts for a domain:
+
+```php
+$contacts = Enom::domains()->contacts('example', 'com')->get();
+
+echo $contacts->registrant->first_name;
+echo $contacts->admin->email;
 ```
 
 Update a specific contact type:
@@ -105,6 +140,66 @@ Enom::domains()->contacts('example', 'com')->update(ContactType::Admin, $contact
 
 Available contact types: `Registrant`, `Admin`, `Tech`, `Billing`.
 
+### Nameservers
+
+```php
+// Get current nameservers
+$nameservers = Enom::domains()->nameservers('example', 'com')->get();
+
+// Update nameservers
+Enom::domains()->nameservers('example', 'com')->update([
+    'ns1.yourhost.com',
+    'ns2.yourhost.com',
+]);
+
+// Register a child nameserver (glue record)
+Enom::domains()->nameservers('example', 'com')->register('ns1.example.com', '1.2.3.4');
+
+// Delete a child nameserver
+Enom::domains()->nameservers('example', 'com')->delete('ns1.example.com');
+```
+
+### DNS records
+
+```php
+use Sensson\Enom\Data\DnsRecord;
+use Sensson\Enom\Enums\DnsRecordType;
+
+// Get all DNS records
+$records = Enom::domains()->dns('example', 'com')->get();
+
+// Update DNS records (replaces all existing records)
+Enom::domains()->dns('example', 'com')->update([
+    new DnsRecord(hostname: 'www', type: DnsRecordType::A, address: '1.2.3.4', ttl: 300),
+    new DnsRecord(hostname: '@', type: DnsRecordType::MX, address: 'mail.example.com', ttl: 300, mx_preference: 10),
+    new DnsRecord(hostname: '@', type: DnsRecordType::TXT, address: 'v=spf1 include:example.com ~all', ttl: 300),
+]);
+```
+
+Available record types: `A`, `AAAA`, `CNAME`, `MX`, `NS`, `TXT`.
+
+### Transfer tracking
+
+```php
+// Get a transfer order by ID
+$order = Enom::transfers()->get('12345');
+
+// Get all transfer orders for a domain
+$orders = Enom::transfers()->getByDomain('example', 'com');
+
+// Cancel a transfer
+Enom::transfers()->cancel('12345');
+```
+
+### Account
+
+```php
+$balance = Enom::account()->balance();
+
+echo $balance->balance;   // 250.0
+echo $balance->currency;  // USD
+```
+
 ## Testing
 
 Use `fake()` with Saloon's `MockClient`:
@@ -113,7 +208,7 @@ Use `fake()` with Saloon's `MockClient`:
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
 use Sensson\Enom\Facades\Enom;
-use Sensson\Enom\Requests\CheckDomain;
+use Sensson\Enom\Requests\Domains\CheckDomain;
 
 $mock = new MockClient([
     CheckDomain::class => MockResponse::make('<interface-response><RRPCode>210</RRPCode></interface-response>'),
@@ -121,7 +216,7 @@ $mock = new MockClient([
 
 Enom::fake($mock);
 
-$response = Enom::domains()->check('example', 'com');
+$result = Enom::domains()->check('example', 'com');
 
 $mock->assertSent(CheckDomain::class);
 ```
