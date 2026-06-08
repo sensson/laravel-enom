@@ -12,6 +12,6 @@ final class AccountResource extends BaseResource
 {
     public function balance(): AccountBalance
     {
-        return $this->connector->send(new GetBalance())->dto();
+        return $this->connector->send(new GetBalance)->dto();
     }
 }

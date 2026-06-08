@@ -32,7 +32,7 @@ final class UpdateNameservers extends EnomRequest
         ];
 
         foreach ($this->nameservers as $index => $nameserver) {
-            $params['NS' . ($index + 1)] = $nameserver;
+            $params['NS'.($index + 1)] = $nameserver;
         }
 
         return $params;

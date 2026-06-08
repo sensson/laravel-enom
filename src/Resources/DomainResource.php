@@ -70,7 +70,7 @@ final class DomainResource extends BaseResource
     /** @return array<string> */
     public function list(): array
     {
-        return $this->connector->send(new ListDomains())->dto();
+        return $this->connector->send(new ListDomains)->dto();
     }
 
     public function getLock(string $sld, string $tld): DomainLock
