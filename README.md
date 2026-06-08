@@ -35,20 +35,22 @@ All resources are accessed through the `Enom` facade.
 
 ### Domains
 
+A single domain is scoped through `Enom::domain($sld, $tld)`. Account-wide operations live on `Enom::domains()`.
+
 ```php
 use Sensson\Enom\Facades\Enom;
 
 // Check availability
-Enom::domains()->check('example', 'com');
+Enom::domain('example', 'com')->check();
 
 // Get domain info
-Enom::domains()->get('example', 'com');
+Enom::domain('example', 'com')->get();
 
 // List all domains in the account
 Enom::domains()->list();
 
 // Renew a domain
-Enom::domains()->renew('example', 'com', years: 2);
+Enom::domain('example', 'com')->renew(years: 2);
 ```
 
 #### Register a domain
@@ -69,38 +71,38 @@ $contact = new Contact(
     email: 'john@example.com',
 );
 
-Enom::domains()->register('example', 'com', $contact);
+Enom::domain('example', 'com')->register($contact);
 ```
 
 You can provide separate contacts for admin, tech, and billing. If omitted, the registrant contact is used for all:
 
 ```php
-Enom::domains()->register('example', 'com', $registrant, admin: $admin, tech: $tech, billing: $billing, years: 2);
+Enom::domain('example', 'com')->register($registrant, admin: $admin, tech: $tech, billing: $billing, years: 2);
 ```
 
 #### Transfer a domain in
 
 ```php
-Enom::domains()->transfer('example', 'com', 'authorization-code');
+Enom::domain('example', 'com')->transfer('authorization-code');
 ```
 
 #### Lock and unlock
 
 ```php
 // Lock a domain to prevent unauthorized transfers
-Enom::domains()->lock('example', 'com');
+Enom::domain('example', 'com')->lock();
 
 // Unlock before initiating an outgoing transfer
-Enom::domains()->unlock('example', 'com');
+Enom::domain('example', 'com')->unlock();
 
 // Get current lock status
-Enom::domains()->getLock('example', 'com');
+Enom::domain('example', 'com')->getLock();
 ```
 
 #### EPP / auth code (outgoing transfer)
 
 ```php
-$authCode = Enom::domains()->getAuthCode('example', 'com');
+$authCode = Enom::domain('example', 'com')->getAuthCode();
 
 echo $authCode->code; // EPP-SECRET-123
 ```
@@ -108,15 +110,15 @@ echo $authCode->code; // EPP-SECRET-123
 #### Auto-renew
 
 ```php
-Enom::domains()->setAutoRenew('example', 'com', true);
+Enom::domain('example', 'com')->setAutoRenew(true);
 
-$enabled = Enom::domains()->getAutoRenew('example', 'com');
+$enabled = Enom::domain('example', 'com')->getAutoRenew();
 ```
 
 #### Push to another account
 
 ```php
-Enom::domains()->push('example', 'com', 'other-reseller-account');
+Enom::domain('example', 'com')->push('other-reseller-account');
 ```
 
 ### Contacts
@@ -124,7 +126,7 @@ Enom::domains()->push('example', 'com', 'other-reseller-account');
 Get all contacts for a domain:
 
 ```php
-$contacts = Enom::domains()->contacts('example', 'com')->get();
+$contacts = Enom::domain('example', 'com')->contacts()->get();
 
 echo $contacts->registrant->first_name;
 echo $contacts->admin->email;
@@ -135,7 +137,7 @@ Update a specific contact type:
 ```php
 use Sensson\Enom\Enums\ContactType;
 
-Enom::domains()->contacts('example', 'com')->update(ContactType::Admin, $contact);
+Enom::domain('example', 'com')->contacts()->update(ContactType::Admin, $contact);
 ```
 
 Available contact types: `Registrant`, `Admin`, `Tech`, `Billing`.
@@ -143,20 +145,22 @@ Available contact types: `Registrant`, `Admin`, `Tech`, `Billing`.
 ### Nameservers
 
 ```php
+use Sensson\Enom\Data\Nameservers;
+
 // Get current nameservers
-$nameservers = Enom::domains()->nameservers('example', 'com')->get();
+$nameservers = Enom::domain('example', 'com')->nameservers()->get();
 
 // Update nameservers
-Enom::domains()->nameservers('example', 'com')->update([
+Enom::domain('example', 'com')->nameservers()->update(new Nameservers([
     'ns1.yourhost.com',
     'ns2.yourhost.com',
-]);
+]));
 
 // Register a child nameserver (glue record)
-Enom::domains()->nameservers('example', 'com')->register('ns1.example.com', '1.2.3.4');
+Enom::domain('example', 'com')->nameservers()->register('ns1.example.com', '1.2.3.4');
 
 // Delete a child nameserver
-Enom::domains()->nameservers('example', 'com')->delete('ns1.example.com');
+Enom::domain('example', 'com')->nameservers()->delete('ns1.example.com');
 ```
 
 ### DNS records
@@ -166,10 +170,10 @@ use Sensson\Enom\Data\DnsRecord;
 use Sensson\Enom\Enums\DnsRecordType;
 
 // Get all DNS records
-$records = Enom::domains()->dns('example', 'com')->get();
+$records = Enom::domain('example', 'com')->dns()->get();
 
 // Update DNS records (replaces all existing records)
-Enom::domains()->dns('example', 'com')->update([
+Enom::domain('example', 'com')->dns()->update([
     new DnsRecord(hostname: 'www', type: DnsRecordType::A, address: '1.2.3.4', ttl: 300),
     new DnsRecord(hostname: '@', type: DnsRecordType::MX, address: 'mail.example.com', ttl: 300, mx_preference: 10),
     new DnsRecord(hostname: '@', type: DnsRecordType::TXT, address: 'v=spf1 include:example.com ~all', ttl: 300),
@@ -181,11 +185,11 @@ Available record types: `A`, `AAAA`, `CNAME`, `MX`, `NS`, `TXT`.
 ### Transfer tracking
 
 ```php
+// Get all transfer orders for a domain
+$orders = Enom::domain('example', 'com')->transfers()->list();
+
 // Get a transfer order by ID
 $order = Enom::transfers()->get('12345');
-
-// Get all transfer orders for a domain
-$orders = Enom::transfers()->getByDomain('example', 'com');
 
 // Cancel a transfer
 Enom::transfers()->cancel('12345');
@@ -216,7 +220,7 @@ $mock = new MockClient([
 
 Enom::fake($mock);
 
-$result = Enom::domains()->check('example', 'com');
+$result = Enom::domain('example', 'com')->check();
 
 $mock->assertSent(CheckDomain::class);
 ```
