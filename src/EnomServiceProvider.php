@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Sensson\Enom;
 
-use Sensson\Enom\Data\EnomCredentials;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
@@ -20,11 +19,9 @@ class EnomServiceProvider extends PackageServiceProvider
     public function packageRegistered(): void
     {
         $this->app->singleton(Enom::class, fn (): Enom => new Enom(
-            new EnomCredentials(
-                username: config()->string('enom.username'),
-                token: config()->string('enom.token'),
-                sandbox: config()->boolean('enom.sandbox', true),
-            )
+            username: config()->string('enom.username'),
+            token: config()->string('enom.token'),
+            sandbox: config()->boolean('enom.sandbox', true),
         ));
     }
 }
