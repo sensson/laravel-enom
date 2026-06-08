@@ -6,14 +6,14 @@ namespace Sensson\Enom\Requests\Dns;
 
 use Saloon\Http\Response;
 use Sensson\Enom\Data\DnsRecord;
+use Sensson\Enom\Data\DomainName;
 use Sensson\Enom\Enums\DnsRecordType;
 use Sensson\Enom\Requests\EnomRequest;
 
 final class GetDnsHosts extends EnomRequest
 {
     public function __construct(
-        private readonly string $sld,
-        private readonly string $tld,
+        private readonly DomainName $domain,
     ) {
         //
     }
@@ -26,8 +26,8 @@ final class GetDnsHosts extends EnomRequest
     protected function parameters(): array
     {
         return [
-            'SLD' => $this->sld,
-            'TLD' => $this->tld,
+            'SLD' => $this->domain->sld,
+            'TLD' => $this->domain->tld,
         ];
     }
 

@@ -6,13 +6,13 @@ namespace Sensson\Enom\Requests\Domains;
 
 use Saloon\Http\Response;
 use Sensson\Enom\Data\DomainLock;
+use Sensson\Enom\Data\DomainName;
 use Sensson\Enom\Requests\EnomRequest;
 
 final class GetRegLock extends EnomRequest
 {
     public function __construct(
-        private readonly string $sld,
-        private readonly string $tld,
+        private readonly DomainName $domain,
     ) {
         //
     }
@@ -25,8 +25,8 @@ final class GetRegLock extends EnomRequest
     protected function parameters(): array
     {
         return [
-            'SLD' => $this->sld,
-            'TLD' => $this->tld,
+            'SLD' => $this->domain->sld,
+            'TLD' => $this->domain->tld,
         ];
     }
 
@@ -35,8 +35,8 @@ final class GetRegLock extends EnomRequest
         $xml = $response->xml();
 
         return new DomainLock(
-            sld: $this->sld,
-            tld: $this->tld,
+            sld: $this->domain->sld,
+            tld: $this->domain->tld,
             locked: (int) $xml->{'reg-lock'} === 1,
         );
     }

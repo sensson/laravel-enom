@@ -5,14 +5,14 @@ declare(strict_types=1);
 namespace Sensson\Enom\Requests\Domains;
 
 use Saloon\Http\Response;
+use Sensson\Enom\Data\DomainName;
 use Sensson\Enom\Data\DomainTransfer;
 use Sensson\Enom\Requests\EnomRequest;
 
 final class TransferDomain extends EnomRequest
 {
     public function __construct(
-        private readonly string $sld,
-        private readonly string $tld,
+        private readonly DomainName $domain,
         private readonly string $code,
     ) {
         //
@@ -26,8 +26,8 @@ final class TransferDomain extends EnomRequest
     protected function parameters(): array
     {
         return [
-            'SLD' => $this->sld,
-            'TLD' => $this->tld,
+            'SLD' => $this->domain->sld,
+            'TLD' => $this->domain->tld,
             'OrderType' => 'AutoVerification',
             'DomainPassword' => $this->code,
         ];
@@ -38,8 +38,8 @@ final class TransferDomain extends EnomRequest
         $xml = $response->xml();
 
         return new DomainTransfer(
-            sld: $this->sld,
-            tld: $this->tld,
+            sld: $this->domain->sld,
+            tld: $this->domain->tld,
             order_id: (string) ($xml->OrderID ?? null) ?: null,
             status_id: (string) ($xml->TransferOrder->statusid ?? null) ?: null,
         );

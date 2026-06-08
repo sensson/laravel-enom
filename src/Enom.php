@@ -10,6 +10,7 @@ use Saloon\Traits\Plugins\AlwaysThrowOnErrors;
 use Sensson\Enom\Data\EnomCredentials;
 use Sensson\Enom\Resources\AccountResource;
 use Sensson\Enom\Resources\DomainResource;
+use Sensson\Enom\Resources\DomainsResource;
 use Sensson\Enom\Resources\TransferResource;
 
 final class Enom extends Connector
@@ -39,9 +40,14 @@ final class Enom extends Connector
         ];
     }
 
-    public function domains(): DomainResource
+    public function domain(string $sld, string $tld): DomainResource
     {
-        return new DomainResource($this);
+        return new DomainResource($this, $sld, $tld);
+    }
+
+    public function domains(): DomainsResource
+    {
+        return new DomainsResource($this);
     }
 
     public function transfers(): TransferResource

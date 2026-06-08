@@ -7,14 +7,14 @@ namespace Sensson\Enom\Requests\Contacts;
 use Saloon\Http\Response;
 use Sensson\Enom\Data\Contact;
 use Sensson\Enom\Data\Contacts;
+use Sensson\Enom\Data\DomainName;
 use Sensson\Enom\Requests\EnomRequest;
 use SimpleXMLElement;
 
 final class GetContacts extends EnomRequest
 {
     public function __construct(
-        private readonly string $sld,
-        private readonly string $tld,
+        private readonly DomainName $domain,
     ) {
         //
     }
@@ -27,8 +27,8 @@ final class GetContacts extends EnomRequest
     protected function parameters(): array
     {
         return [
-            'SLD' => $this->sld,
-            'TLD' => $this->tld,
+            'SLD' => $this->domain->sld,
+            'TLD' => $this->domain->tld,
         ];
     }
 

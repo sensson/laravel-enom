@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace Sensson\Enom\Requests\Domains;
 
 use Saloon\Http\Response;
+use Sensson\Enom\Data\DomainName;
 use Sensson\Enom\Requests\EnomRequest;
 
 final class GetRenew extends EnomRequest
 {
     public function __construct(
-        private readonly string $sld,
-        private readonly string $tld,
+        private readonly DomainName $domain,
     ) {
         //
     }
@@ -24,8 +24,8 @@ final class GetRenew extends EnomRequest
     protected function parameters(): array
     {
         return [
-            'SLD' => $this->sld,
-            'TLD' => $this->tld,
+            'SLD' => $this->domain->sld,
+            'TLD' => $this->domain->tld,
         ];
     }
 

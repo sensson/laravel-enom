@@ -6,13 +6,13 @@ namespace Sensson\Enom\Requests\Domains;
 
 use Saloon\Http\Response;
 use Sensson\Enom\Data\AuthCode;
+use Sensson\Enom\Data\DomainName;
 use Sensson\Enom\Requests\EnomRequest;
 
 final class GetAuthCode extends EnomRequest
 {
     public function __construct(
-        private readonly string $sld,
-        private readonly string $tld,
+        private readonly DomainName $domain,
     ) {
         //
     }
@@ -25,8 +25,8 @@ final class GetAuthCode extends EnomRequest
     protected function parameters(): array
     {
         return [
-            'SLD' => $this->sld,
-            'TLD' => $this->tld,
+            'SLD' => $this->domain->sld,
+            'TLD' => $this->domain->tld,
         ];
     }
 
@@ -35,8 +35,8 @@ final class GetAuthCode extends EnomRequest
         $xml = $response->xml();
 
         return new AuthCode(
-            sld: $this->sld,
-            tld: $this->tld,
+            sld: $this->domain->sld,
+            tld: $this->domain->tld,
             code: (string) $xml->authinfo,
         );
     }

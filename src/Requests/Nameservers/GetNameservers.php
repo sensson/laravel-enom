@@ -5,14 +5,14 @@ declare(strict_types=1);
 namespace Sensson\Enom\Requests\Nameservers;
 
 use Saloon\Http\Response;
+use Sensson\Enom\Data\DomainName;
 use Sensson\Enom\Data\Nameservers;
 use Sensson\Enom\Requests\EnomRequest;
 
 final class GetNameservers extends EnomRequest
 {
     public function __construct(
-        private readonly string $sld,
-        private readonly string $tld,
+        private readonly DomainName $domain,
     ) {
         //
     }
@@ -25,8 +25,8 @@ final class GetNameservers extends EnomRequest
     protected function parameters(): array
     {
         return [
-            'SLD' => $this->sld,
-            'TLD' => $this->tld,
+            'SLD' => $this->domain->sld,
+            'TLD' => $this->domain->tld,
         ];
     }
 

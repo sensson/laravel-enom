@@ -73,7 +73,7 @@ it('gets contacts for a domain', function (): void {
 
     Enom::fake($mock);
 
-    $result = Enom::domains()->contacts('example', 'com')->get();
+    $result = Enom::domain('example', 'com')->contacts()->get();
 
     expect($result)
         ->toBeInstanceOf(Contacts::class)
@@ -111,7 +111,7 @@ it('updates a registrant contact', function (): void {
         email: 'john@example.com',
     );
 
-    Enom::domains()->contacts('example', 'com')->update(ContactType::Registrant, $contact);
+    Enom::domain('example', 'com')->contacts()->update(ContactType::Registrant, $contact);
 
     $mock->assertSent(function (UpdateContacts $request): bool {
         return $request->query()->get('Command') === 'Contacts'
@@ -141,7 +141,7 @@ it('updates a tech contact', function (): void {
         email: 'jane@example.com',
     );
 
-    Enom::domains()->contacts('example', 'com')->update(ContactType::Tech, $contact);
+    Enom::domain('example', 'com')->contacts()->update(ContactType::Tech, $contact);
 
     $mock->assertSent(function (UpdateContacts $request): bool {
         return $request->query()->get('ContactType') === 'Tech'

@@ -7,13 +7,13 @@ namespace Sensson\Enom\Requests\Domains;
 use Saloon\Http\Response;
 use Sensson\Enom\Data\Contact;
 use Sensson\Enom\Data\Domain;
+use Sensson\Enom\Data\DomainName;
 use Sensson\Enom\Requests\EnomRequest;
 
 final class RegisterDomain extends EnomRequest
 {
     public function __construct(
-        private readonly string $sld,
-        private readonly string $tld,
+        private readonly DomainName $domain,
         private readonly Contact $registrant,
         private readonly ?Contact $admin = null,
         private readonly ?Contact $tech = null,
@@ -35,8 +35,8 @@ final class RegisterDomain extends EnomRequest
         $billing = $this->billing ?? $this->registrant;
 
         return collect([
-            'SLD' => $this->sld,
-            'TLD' => $this->tld,
+            'SLD' => $this->domain->sld,
+            'TLD' => $this->domain->tld,
             'NumYears' => $this->years,
         ])
             ->merge($this->registrant->toQueryParams('Registrant'))
@@ -49,8 +49,8 @@ final class RegisterDomain extends EnomRequest
     public function createDtoFromResponse(Response $response): Domain
     {
         return new Domain(
-            sld: $this->sld,
-            tld: $this->tld,
+            sld: $this->domain->sld,
+            tld: $this->domain->tld,
         );
     }
 }

@@ -31,7 +31,7 @@ it('checks domain availability', function (): void {
 
     Enom::fake($mock);
 
-    $result = Enom::domains()->check('example', 'com');
+    $result = Enom::domain('example', 'com')->check();
 
     expect($result)
         ->toBeInstanceOf(DomainAvailability::class)
@@ -54,7 +54,7 @@ it('checks unavailable domain', function (): void {
 
     Enom::fake($mock);
 
-    $result = Enom::domains()->check('example', 'com');
+    $result = Enom::domain('example', 'com')->check();
 
     expect($result)
         ->toBeInstanceOf(DomainAvailability::class)
@@ -81,7 +81,7 @@ it('registers a domain', function (): void {
         email: 'john@example.com',
     );
 
-    $result = Enom::domains()->register('example', 'com', $contact, years: 2);
+    $result = Enom::domain('example', 'com')->register($contact, years: 2);
 
     expect($result)
         ->toBeInstanceOf(Domain::class)
@@ -133,7 +133,7 @@ it('registers a domain with separate contacts', function (): void {
         email: 'jane@example.com',
     );
 
-    Enom::domains()->register('example', 'com', $registrant, admin: $admin);
+    Enom::domain('example', 'com')->register($registrant, admin: $admin);
 
     $mock->assertSent(function (RegisterDomain $request): bool {
         return $request->query()->get('RegistrantFirstName') === 'John'
@@ -152,7 +152,7 @@ it('gets domain info', function (): void {
 
     Enom::fake($mock);
 
-    $result = Enom::domains()->get('example', 'com');
+    $result = Enom::domain('example', 'com')->get();
 
     expect($result)
         ->toBeInstanceOf(Domain::class)
@@ -176,7 +176,7 @@ it('renews a domain', function (): void {
 
     Enom::fake($mock);
 
-    $result = Enom::domains()->renew('example', 'com', years: 3);
+    $result = Enom::domain('example', 'com')->renew(years: 3);
 
     expect($result)
         ->toBeInstanceOf(Domain::class)
@@ -200,7 +200,7 @@ it('transfers a domain', function (): void {
 
     Enom::fake($mock);
 
-    $result = Enom::domains()->transfer('example', 'com', 'auth-code-123');
+    $result = Enom::domain('example', 'com')->transfer('auth-code-123');
 
     expect($result)
         ->toBeInstanceOf(DomainTransfer::class)
@@ -253,7 +253,7 @@ it('gets the domain lock status', function (): void {
 
     Enom::fake($mock);
 
-    $result = Enom::domains()->getLock('example', 'com');
+    $result = Enom::domain('example', 'com')->getLock();
 
     expect($result)
         ->toBeInstanceOf(DomainLock::class)
@@ -274,7 +274,7 @@ it('locks a domain', function (): void {
 
     Enom::fake($mock);
 
-    $result = Enom::domains()->lock('example', 'com');
+    $result = Enom::domain('example', 'com')->lock();
 
     expect($result)
         ->toBeInstanceOf(DomainLock::class)
@@ -293,7 +293,7 @@ it('unlocks a domain', function (): void {
 
     Enom::fake($mock);
 
-    $result = Enom::domains()->unlock('example', 'com');
+    $result = Enom::domain('example', 'com')->unlock();
 
     expect($result)
         ->toBeInstanceOf(DomainLock::class)
@@ -312,7 +312,7 @@ it('gets auto renew status', function (): void {
 
     Enom::fake($mock);
 
-    $result = Enom::domains()->getAutoRenew('example', 'com');
+    $result = Enom::domain('example', 'com')->getAutoRenew();
 
     expect($result)->toBeTrue();
 
@@ -330,7 +330,7 @@ it('sets auto renew', function (): void {
 
     Enom::fake($mock);
 
-    Enom::domains()->setAutoRenew('example', 'com', true);
+    Enom::domain('example', 'com')->setAutoRenew(true);
 
     $mock->assertSent(function (SetRenew $request): bool {
         return $request->query()->get('Command') === 'SetRenew'
@@ -345,7 +345,7 @@ it('gets the auth code', function (): void {
 
     Enom::fake($mock);
 
-    $result = Enom::domains()->getAuthCode('example', 'com');
+    $result = Enom::domain('example', 'com')->getAuthCode();
 
     expect($result)
         ->toBeInstanceOf(AuthCode::class)
@@ -366,7 +366,7 @@ it('pushes a domain to another account', function (): void {
 
     Enom::fake($mock);
 
-    Enom::domains()->push('example', 'com', 'other-reseller');
+    Enom::domain('example', 'com')->push('other-reseller');
 
     $mock->assertSent(function (PushDomain $request): bool {
         return $request->query()->get('Command') === 'PushDomain'

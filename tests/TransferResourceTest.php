@@ -48,7 +48,7 @@ it('gets a transfer order by id', function (): void {
     });
 });
 
-it('gets transfer orders by domain', function (): void {
+it('gets transfer orders for a domain', function (): void {
     $xml = <<<'XML'
     <interface-response>
         <TP_GetOrdersByDomain>
@@ -72,7 +72,7 @@ it('gets transfer orders by domain', function (): void {
 
     Enom::fake($mock);
 
-    $result = Enom::transfers()->getByDomain('example', 'com');
+    $result = Enom::domain('example', 'com')->transfers()->list();
 
     expect($result)
         ->toBeArray()

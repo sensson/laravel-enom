@@ -11,13 +11,13 @@ use Sensson\Enom\Data\Contact;
 use Sensson\Enom\Data\Domain;
 use Sensson\Enom\Data\DomainAvailability;
 use Sensson\Enom\Data\DomainLock;
+use Sensson\Enom\Data\DomainName;
 use Sensson\Enom\Data\DomainTransfer;
 use Sensson\Enom\Requests\Domains\CheckDomain;
 use Sensson\Enom\Requests\Domains\GetAuthCode;
 use Sensson\Enom\Requests\Domains\GetDomain;
 use Sensson\Enom\Requests\Domains\GetRegLock;
 use Sensson\Enom\Requests\Domains\GetRenew;
-use Sensson\Enom\Requests\Domains\ListDomains;
 use Sensson\Enom\Requests\Domains\PushDomain;
 use Sensson\Enom\Requests\Domains\RegisterDomain;
 use Sensson\Enom\Requests\Domains\RenewDomain;
@@ -27,25 +27,27 @@ use Sensson\Enom\Requests\Domains\TransferDomain;
 
 final class DomainResource extends BaseResource
 {
+    private DomainName $domain;
+
     public function __construct(
         protected readonly Connector $connector,
+        string $sld,
+        string $tld,
     ) {
-        //
+        $this->domain = new DomainName($sld, $tld);
     }
 
-    public function check(string $sld, string $tld): DomainAvailability
+    public function check(): DomainAvailability
     {
-        return $this->connector->send(new CheckDomain($sld, $tld))->dto();
+        return $this->connector->send(new CheckDomain($this->domain))->dto();
     }
 
-    public function get(string $sld, string $tld): Domain
+    public function get(): Domain
     {
-        return $this->connector->send(new GetDomain($sld, $tld))->dto();
+        return $this->connector->send(new GetDomain($this->domain))->dto();
     }
 
     public function register(
-        string $sld,
-        string $tld,
         Contact $registrant,
         ?Contact $admin = null,
         ?Contact $tech = null,
@@ -53,73 +55,72 @@ final class DomainResource extends BaseResource
         int $years = 1,
     ): Domain {
         return $this->connector->send(new RegisterDomain(
-            $sld, $tld, $registrant, $admin, $tech, $billing, $years,
+            $this->domain, $registrant, $admin, $tech, $billing, $years,
         ))->dto();
     }
 
-    public function renew(string $sld, string $tld, int $years = 1): Domain
+    public function renew(int $years = 1): Domain
     {
-        return $this->connector->send(new RenewDomain($sld, $tld, $years))->dto();
+        return $this->connector->send(new RenewDomain($this->domain, $years))->dto();
     }
 
-    public function transfer(string $sld, string $tld, string $code): DomainTransfer
+    public function transfer(string $code): DomainTransfer
     {
-        return $this->connector->send(new TransferDomain($sld, $tld, $code))->dto();
+        return $this->connector->send(new TransferDomain($this->domain, $code))->dto();
     }
 
-    /** @return array<string> */
-    public function list(): array
+    public function getLock(): DomainLock
     {
-        return $this->connector->send(new ListDomains)->dto();
+        return $this->connector->send(new GetRegLock($this->domain))->dto();
     }
 
-    public function getLock(string $sld, string $tld): DomainLock
+    public function lock(): DomainLock
     {
-        return $this->connector->send(new GetRegLock($sld, $tld))->dto();
+        return $this->connector->send(new SetRegLock($this->domain, locked: true))->dto();
     }
 
-    public function lock(string $sld, string $tld): DomainLock
+    public function unlock(): DomainLock
     {
-        return $this->connector->send(new SetRegLock($sld, $tld, locked: true))->dto();
+        return $this->connector->send(new SetRegLock($this->domain, locked: false))->dto();
     }
 
-    public function unlock(string $sld, string $tld): DomainLock
+    public function getAutoRenew(): bool
     {
-        return $this->connector->send(new SetRegLock($sld, $tld, locked: false))->dto();
+        return $this->connector->send(new GetRenew($this->domain))->dto();
     }
 
-    public function getAutoRenew(string $sld, string $tld): bool
+    public function setAutoRenew(bool $enabled): void
     {
-        return $this->connector->send(new GetRenew($sld, $tld))->dto();
+        $this->connector->send(new SetRenew($this->domain, $enabled));
     }
 
-    public function setAutoRenew(string $sld, string $tld, bool $enabled): void
+    public function getAuthCode(): AuthCode
     {
-        $this->connector->send(new SetRenew($sld, $tld, $enabled));
+        return $this->connector->send(new GetAuthCode($this->domain))->dto();
     }
 
-    public function getAuthCode(string $sld, string $tld): AuthCode
+    public function push(string $account): void
     {
-        return $this->connector->send(new GetAuthCode($sld, $tld))->dto();
+        $this->connector->send(new PushDomain($this->domain, $account));
     }
 
-    public function push(string $sld, string $tld, string $account): void
+    public function contacts(): ContactResource
     {
-        $this->connector->send(new PushDomain($sld, $tld, $account));
+        return new ContactResource($this->connector, $this->domain);
     }
 
-    public function contacts(string $sld, string $tld): ContactResource
+    public function nameservers(): NameserverResource
     {
-        return new ContactResource($this->connector, $sld, $tld);
+        return new NameserverResource($this->connector, $this->domain);
     }
 
-    public function nameservers(string $sld, string $tld): NameserverResource
+    public function dns(): DnsResource
     {
-        return new NameserverResource($this->connector, $sld, $tld);
+        return new DnsResource($this->connector, $this->domain);
     }
 
-    public function dns(string $sld, string $tld): DnsResource
+    public function transfers(): DomainTransferResource
     {
-        return new DnsResource($this->connector, $sld, $tld);
+        return new DomainTransferResource($this->connector, $this->domain);
     }
 }

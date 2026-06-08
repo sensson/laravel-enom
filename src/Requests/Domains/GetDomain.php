@@ -6,13 +6,13 @@ namespace Sensson\Enom\Requests\Domains;
 
 use Saloon\Http\Response;
 use Sensson\Enom\Data\Domain;
+use Sensson\Enom\Data\DomainName;
 use Sensson\Enom\Requests\EnomRequest;
 
 final class GetDomain extends EnomRequest
 {
     public function __construct(
-        private readonly string $sld,
-        private readonly string $tld,
+        private readonly DomainName $domain,
     ) {
         //
     }
@@ -25,8 +25,8 @@ final class GetDomain extends EnomRequest
     protected function parameters(): array
     {
         return [
-            'SLD' => $this->sld,
-            'TLD' => $this->tld,
+            'SLD' => $this->domain->sld,
+            'TLD' => $this->domain->tld,
         ];
     }
 
@@ -36,8 +36,8 @@ final class GetDomain extends EnomRequest
         $info = $xml->GetDomainInfo;
 
         return new Domain(
-            sld: $this->sld,
-            tld: $this->tld,
+            sld: $this->domain->sld,
+            tld: $this->domain->tld,
             status: (string) ($info->status ?? null) ?: null,
             expiration: (string) ($info->{'expiration-date'} ?? null) ?: null,
             auto_renew: isset($info->services)

@@ -38,7 +38,7 @@ it('gets dns records for a domain', function (): void {
 
     Enom::fake($mock);
 
-    $result = Enom::domains()->dns('example', 'com')->get();
+    $result = Enom::domain('example', 'com')->dns()->get();
 
     expect($result)
         ->toBeArray()
@@ -76,7 +76,7 @@ it('sets dns records for a domain', function (): void {
         new DnsRecord(hostname: '@', type: DnsRecordType::MX, address: 'mail.example.com', ttl: 300, mx_preference: 10),
     ];
 
-    $result = Enom::domains()->dns('example', 'com')->update($records);
+    $result = Enom::domain('example', 'com')->dns()->update($records);
 
     expect($result)->toBeArray()->toHaveCount(2);
 
