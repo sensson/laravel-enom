@@ -2,33 +2,29 @@
 
 declare(strict_types=1);
 
-namespace Sensson\Enom\Requests;
+namespace Sensson\Enom\Requests\Domains;
 
-use Saloon\Enums\Method;
-use Saloon\Http\Request;
 use Saloon\Http\Response;
 use Sensson\Enom\Data\Domain;
+use Sensson\Enom\Requests\EnomRequest;
 
-final class GetDomain extends Request
+final class GetDomain extends EnomRequest
 {
-    protected Method $method = Method::GET;
-
     public function __construct(
-        protected readonly string $sld,
-        protected readonly string $tld,
+        private readonly string $sld,
+        private readonly string $tld,
     ) {
         //
     }
 
-    public function resolveEndpoint(): string
+    protected function command(): string
     {
-        return '/interface.asp';
+        return 'GetDomainInfo';
     }
 
-    protected function defaultQuery(): array
+    protected function parameters(): array
     {
         return [
-            'Command' => 'GetDomainInfo',
             'SLD' => $this->sld,
             'TLD' => $this->tld,
         ];

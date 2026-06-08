@@ -10,8 +10,8 @@ use Saloon\Http\Response;
 use Sensson\Enom\Data\Contact;
 use Sensson\Enom\Data\Contacts;
 use Sensson\Enom\Enums\ContactType;
-use Sensson\Enom\Requests\GetContacts;
-use Sensson\Enom\Requests\UpdateContacts;
+use Sensson\Enom\Requests\Contacts\GetContacts;
+use Sensson\Enom\Requests\Contacts\UpdateContacts;
 
 final class ContactResource extends BaseResource
 {

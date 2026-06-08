@@ -8,8 +8,8 @@ use Sensson\Enom\Data\Contact;
 use Sensson\Enom\Data\Contacts;
 use Sensson\Enom\Enums\ContactType;
 use Sensson\Enom\Facades\Enom;
-use Sensson\Enom\Requests\GetContacts;
-use Sensson\Enom\Requests\UpdateContacts;
+use Sensson\Enom\Requests\Contacts\GetContacts;
+use Sensson\Enom\Requests\Contacts\UpdateContacts;
 
 it('gets contacts for a domain', function (): void {
     $xml = <<<'XML'

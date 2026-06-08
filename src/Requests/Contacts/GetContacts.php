@@ -2,35 +2,31 @@
 
 declare(strict_types=1);
 
-namespace Sensson\Enom\Requests;
+namespace Sensson\Enom\Requests\Contacts;
 
-use Saloon\Enums\Method;
-use Saloon\Http\Request;
 use Saloon\Http\Response;
 use Sensson\Enom\Data\Contact;
 use Sensson\Enom\Data\Contacts;
+use Sensson\Enom\Requests\EnomRequest;
 use SimpleXMLElement;
 
-final class GetContacts extends Request
+final class GetContacts extends EnomRequest
 {
-    protected Method $method = Method::GET;
-
     public function __construct(
-        protected readonly string $sld,
-        protected readonly string $tld,
+        private readonly string $sld,
+        private readonly string $tld,
     ) {
         //
     }
 
-    public function resolveEndpoint(): string
+    protected function command(): string
     {
-        return '/interface.asp';
+        return 'GetContacts';
     }
 
-    protected function defaultQuery(): array
+    protected function parameters(): array
     {
         return [
-            'Command' => 'GetContacts',
             'SLD' => $this->sld,
             'TLD' => $this->tld,
         ];

@@ -7,7 +7,9 @@ namespace Sensson\Enom;
 use Saloon\Http\Connector;
 use Saloon\Traits\Plugins\AcceptsJson;
 use Saloon\Traits\Plugins\AlwaysThrowOnErrors;
+use Sensson\Enom\Resources\AccountResource;
 use Sensson\Enom\Resources\DomainResource;
+use Sensson\Enom\Resources\TransferResource;
 
 final class Enom extends Connector
 {
@@ -41,5 +43,15 @@ final class Enom extends Connector
     public function domains(): DomainResource
     {
         return new DomainResource($this);
+    }
+
+    public function transfers(): TransferResource
+    {
+        return new TransferResource($this);
+    }
+
+    public function account(): AccountResource
+    {
+        return new AccountResource($this);
     }
 }
