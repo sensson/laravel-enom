@@ -35,20 +35,19 @@ final class GetDnsSec extends EnomRequest
     {
         $xml = $response->xml();
 
-        $keyTags = $xml->KeyTag;
-        $algorithms = $xml->Algorithm;
-        $digestTypes = $xml->DigestType;
-        $digests = $xml->Digest;
-
         $records = [];
 
-        foreach ($keyTags as $index => $keyTag) {
+        $index = 0;
+
+        foreach ($xml->KeyTag as $keyTag) {
             $records[] = new DnssecRecord(
                 key_tag: (int) $keyTag,
-                algorithm: (int) ($algorithms[$index] ?? 0),
-                digest_type: (int) ($digestTypes[$index] ?? 0),
-                digest: (string) ($digests[$index] ?? ''),
+                algorithm: (int) ($xml->Algorithm[$index] ?? 0),
+                digest_type: (int) ($xml->DigestType[$index] ?? 0),
+                digest: (string) ($xml->Digest[$index] ?? ''),
             );
+
+            $index++;
         }
 
         return $records;
