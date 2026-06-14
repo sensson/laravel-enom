@@ -13,14 +13,25 @@ use Sensson\Enom\Requests\Dnssec\GetDnsSec;
 it('gets dnssec records for a domain', function (): void {
     $xml = <<<'XML'
     <interface-response>
-        <KeyTag>12345</KeyTag>
-        <Algorithm>8</Algorithm>
-        <DigestType>2</DigestType>
-        <Digest>ABCDEF1234567890</Digest>
-        <KeyTag>54321</KeyTag>
-        <Algorithm>13</Algorithm>
-        <DigestType>2</DigestType>
-        <Digest>0987654321FEDCBA</Digest>
+        <DnsSecData>
+            <KeyData>
+                <Algorithm><![CDATA[8]]></Algorithm>
+                <Digest><![CDATA[ABCDEF1234567890]]></Digest>
+                <DigestType><![CDATA[2]]></DigestType>
+                <KeyTag><![CDATA[12345]]></KeyTag>
+            </KeyData>
+            <KeyData>
+                <Algorithm><![CDATA[13]]></Algorithm>
+                <Digest><![CDATA[0987654321FEDCBA]]></Digest>
+                <DigestType><![CDATA[2]]></DigestType>
+                <KeyTag><![CDATA[54321]]></KeyTag>
+            </KeyData>
+            <Result>
+                <ResponseCode>200</ResponseCode>
+                <ResponseMessage><![CDATA[Command completed successfully]]></ResponseMessage>
+            </Result>
+        </DnsSecData>
+        <DnsSecDataCount>2</DnsSecDataCount>
         <ErrCount>0</ErrCount>
     </interface-response>
     XML;
@@ -58,8 +69,21 @@ it('gets dnssec records for a domain', function (): void {
 });
 
 it('returns no dnssec records when none are set', function (): void {
+    $xml = <<<'XML'
+    <interface-response>
+        <DnsSecData>
+            <Result>
+                <ResponseCode>200</ResponseCode>
+                <ResponseMessage><![CDATA[Command completed successfully]]></ResponseMessage>
+            </Result>
+        </DnsSecData>
+        <DnsSecDataCount>0</DnsSecDataCount>
+        <ErrCount>0</ErrCount>
+    </interface-response>
+    XML;
+
     $mock = new MockClient([
-        GetDnsSec::class => MockResponse::make('<interface-response><ErrCount>0</ErrCount></interface-response>'),
+        GetDnsSec::class => MockResponse::make($xml),
     ]);
 
     Enom::fake($mock);
