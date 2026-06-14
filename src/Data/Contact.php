@@ -6,7 +6,7 @@ namespace Sensson\Enom\Data;
 
 use Spatie\LaravelData\Data;
 
-final class Contact extends Data
+class Contact extends Data
 {
     public function __construct(
         public string $first_name,

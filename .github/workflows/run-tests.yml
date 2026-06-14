@@ -12,6 +12,7 @@ on:
 jobs:
   test:
     runs-on: ${{ matrix.os }}
+    timeout-minutes: 5
 
     strategy:
       fail-fast: false
@@ -53,4 +54,4 @@ jobs:
         run: composer show -D
 
       - name: Execute tests
-        run: vendor/bin/pest --ci --no-coverage --exclude-group=integration
+        run: vendor/bin/pest --ci --no-coverage

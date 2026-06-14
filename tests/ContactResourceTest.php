@@ -6,7 +6,7 @@ use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
 use Sensson\Enom\Data\Contact;
 use Sensson\Enom\Data\Contacts;
-use Sensson\Enom\Enums\ContactType;
+use Sensson\Enom\Enums\Type;
 use Sensson\Enom\Facades\Enom;
 use Sensson\Enom\Requests\Contacts\GetContacts;
 use Sensson\Enom\Requests\Contacts\UpdateContacts;
@@ -73,7 +73,7 @@ it('gets contacts for a domain', function (): void {
 
     Enom::fake($mock);
 
-    $result = Enom::domain('example', 'com')->contacts()->get();
+    $result = Enom::domains()->contacts('example', 'com')->get();
 
     expect($result)
         ->toBeInstanceOf(Contacts::class)
@@ -111,11 +111,11 @@ it('updates a registrant contact', function (): void {
         email: 'john@example.com',
     );
 
-    Enom::domain('example', 'com')->contacts()->update(ContactType::Registrant, $contact);
+    Enom::domains()->contacts('example', 'com')->update(Type::Registrant, $contact);
 
     $mock->assertSent(function (UpdateContacts $request): bool {
         return $request->query()->get('Command') === 'Contacts'
-            && $request->query()->get('ContactType') === 'Registrant'
+            && $request->query()->get('Type') === 'Registrant'
             && $request->query()->get('RegistrantFirstName') === 'John'
             && $request->query()->get('RegistrantEmailAddress') === 'john@example.com';
     });
@@ -141,10 +141,10 @@ it('updates a tech contact', function (): void {
         email: 'jane@example.com',
     );
 
-    Enom::domain('example', 'com')->contacts()->update(ContactType::Tech, $contact);
+    Enom::domains()->contacts('example', 'com')->update(Type::Tech, $contact);
 
     $mock->assertSent(function (UpdateContacts $request): bool {
-        return $request->query()->get('ContactType') === 'Tech'
+        return $request->query()->get('Type') === 'Tech'
             && $request->query()->get('TechFirstName') === 'Jane'
             && $request->query()->get('TechEmailAddress') === 'jane@example.com';
     });

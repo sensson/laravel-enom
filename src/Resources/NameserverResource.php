@@ -13,7 +13,7 @@ use Sensson\Enom\Requests\Nameservers\GetNameservers;
 use Sensson\Enom\Requests\Nameservers\RegisterNameserver;
 use Sensson\Enom\Requests\Nameservers\UpdateNameservers;
 
-final class NameserverResource extends BaseResource
+class NameserverResource extends BaseResource
 {
     public function __construct(
         protected readonly Connector $connector,

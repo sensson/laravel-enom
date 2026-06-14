@@ -9,7 +9,7 @@ use Sensson\Enom\Data\DnsRecord;
 use Sensson\Enom\Data\DomainName;
 use Sensson\Enom\Requests\EnomRequest;
 
-final class SetDnsHosts extends EnomRequest
+class SetDnsHosts extends EnomRequest
 {
     /** @param array<DnsRecord> $records */
     public function __construct(

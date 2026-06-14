@@ -6,14 +6,16 @@ namespace Sensson\Enom\Data;
 
 use Spatie\LaravelData\Data;
 
-final class Domain extends Data
+class Domain extends Data
 {
+    /** @param array<Dnssec> $dnssec */
     public function __construct(
         public readonly string $sld,
         public readonly string $tld,
         public readonly ?string $status = null,
         public readonly ?string $expiration = null,
         public readonly ?bool $auto_renew = null,
+        public readonly array $dnssec = [],
     ) {
         //
     }

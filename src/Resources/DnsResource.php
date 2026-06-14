@@ -11,7 +11,7 @@ use Sensson\Enom\Data\DomainName;
 use Sensson\Enom\Requests\Dns\GetDnsHosts;
 use Sensson\Enom\Requests\Dns\SetDnsHosts;
 
-final class DnsResource extends BaseResource
+class DnsResource extends BaseResource
 {
     public function __construct(
         protected readonly Connector $connector,

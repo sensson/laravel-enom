@@ -7,7 +7,7 @@ namespace Sensson\Enom\Requests\Domains;
 use Sensson\Enom\Data\DomainName;
 use Sensson\Enom\Requests\EnomRequest;
 
-final class SetRenew extends EnomRequest
+class SetRenew extends EnomRequest
 {
     public function __construct(
         private readonly DomainName $domain,

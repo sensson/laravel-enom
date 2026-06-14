@@ -6,14 +6,14 @@ namespace Sensson\Enom\Requests\Contacts;
 
 use Sensson\Enom\Data\Contact;
 use Sensson\Enom\Data\DomainName;
-use Sensson\Enom\Enums\ContactType;
+use Sensson\Enom\Enums\Type;
 use Sensson\Enom\Requests\EnomRequest;
 
-final class UpdateContacts extends EnomRequest
+class UpdateContacts extends EnomRequest
 {
     public function __construct(
         private readonly DomainName $domain,
-        private readonly ContactType $type,
+        private readonly Type $type,
         private readonly Contact $contact,
     ) {
         //
@@ -29,7 +29,7 @@ final class UpdateContacts extends EnomRequest
         return collect([
             'SLD' => $this->domain->sld,
             'TLD' => $this->domain->tld,
-            'ContactType' => $this->type->value,
+            'Type' => $this->type->value,
         ])
             ->merge($this->contact->toQueryParams($this->type->value))
             ->all();

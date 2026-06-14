@@ -9,7 +9,7 @@ use Sensson\Enom\Data\DomainName;
 use Sensson\Enom\Data\TransferOrder;
 use Sensson\Enom\Requests\EnomRequest;
 
-final class GetTransferOrdersByDomain extends EnomRequest
+class GetTransferOrdersByDomain extends EnomRequest
 {
     public function __construct(
         private readonly DomainName $domain,
@@ -38,7 +38,7 @@ final class GetTransferOrdersByDomain extends EnomRequest
 
         foreach ($xml->TransferOrder ?? [] as $order) {
             $orders[] = new TransferOrder(
-                order_id: (string) $order->OrderID,
+                order: (string) $order->OrderID,
                 sld: $this->domain->sld,
                 tld: $this->domain->tld,
                 status: (string) ($order->status ?? null) ?: null,

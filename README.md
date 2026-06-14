@@ -31,19 +31,17 @@ Set `ENOM_SANDBOX=false` when you're ready to use the live environment.
 
 ## Usage
 
-All resources are accessed through the `Enom` facade.
+All resources are accessed through the `Enom` facade. A domain is addressed by its second-level and
+top-level label, e.g. `Enom::domains()->get('example', 'com')` for `example.com`.
 
 ### Domains
-
-A single domain is scoped through `Enom::domain($sld, $tld)`. Account-wide operations live on `Enom::domains()`.
 
 ```php
 use Sensson\Enom\Facades\Enom;
 
-Enom::domain('example', 'com')->check();
-Enom::domain('example', 'com')->get();
-Enom::domains()->list();
-Enom::domain('example', 'com')->renew(years: 2);
+$domain = Enom::domains()->get('example', 'com');   // status, expiration, auto_renew, dnssec
+$domains = Enom::domains()->list();
+Enom::domains()->renew('example', 'com', years: 2);
 ```
 
 #### Register a domain
@@ -64,35 +62,38 @@ $contact = new Contact(
     email: 'john@example.com',
 );
 
-Enom::domain('example', 'com')->register($contact);
+Enom::domains()->register('example', 'com', $contact);
 ```
 
-You can provide separate contacts for admin, tech, and billing. If omitted, the registrant contact is used for all:
+You can provide separate contacts for admin, tech, and billing. If omitted, the registrant contact is used
+for all:
 
 ```php
-Enom::domain('example', 'com')->register($registrant, admin: $admin, tech: $tech, billing: $billing, years: 2);
+Enom::domains()->register('example', 'com', $registrant, admin: $admin, tech: $tech, billing: $billing, years: 2);
 ```
 
 #### Transfer a domain in
 
 ```php
-Enom::domain('example', 'com')->transfer('authorization-code');
+Enom::domains()->transfer('example', 'com', 'authorization-code');
 ```
 
 #### Lock and unlock
 
-Lock a domain to prevent unauthorized transfers, unlock before an outgoing transfer, and read the current status:
+Lock a domain to prevent unauthorized transfers, unlock before an outgoing transfer, and read the current
+status:
 
 ```php
-Enom::domain('example', 'com')->lock();
-Enom::domain('example', 'com')->unlock();
-Enom::domain('example', 'com')->getLock();
+Enom::domains()->lock('example', 'com');
+Enom::domains()->unlock('example', 'com');
+
+$locked = Enom::domains()->locked('example', 'com');
 ```
 
 #### EPP / auth code (outgoing transfer)
 
 ```php
-$authCode = Enom::domain('example', 'com')->getAuthCode();
+$authCode = Enom::domains()->getAuthCode('example', 'com');
 
 echo $authCode->code;
 ```
@@ -100,52 +101,46 @@ echo $authCode->code;
 #### Auto-renew
 
 ```php
-Enom::domain('example', 'com')->setAutoRenew(true);
+Enom::domains()->setAutoRenew('example', 'com', true);
 
-$enabled = Enom::domain('example', 'com')->getAutoRenew();
+$enabled = Enom::domains()->getAutoRenew('example', 'com');
 ```
 
 #### Push to another account
 
 ```php
-Enom::domain('example', 'com')->push('other-reseller-account');
+Enom::domains()->push('example', 'com', 'other-reseller-account');
 ```
 
 ### Contacts
 
-Get all contacts for a domain:
-
 ```php
-$contacts = Enom::domain('example', 'com')->contacts()->get();
+use Sensson\Enom\Enums\Type;
+
+$contacts = Enom::domains()->contacts('example', 'com')->get();
 
 echo $contacts->registrant->first_name;
 echo $contacts->admin->email;
+
+Enom::domains()->contacts('example', 'com')->update(Type::Admin, $contact);
 ```
 
-Update a specific contact type:
-
-```php
-use Sensson\Enom\Enums\ContactType;
-
-Enom::domain('example', 'com')->contacts()->update(ContactType::Admin, $contact);
-```
-
-Available contact types: `Registrant`, `Admin`, `Tech`, `Billing`.
+Available contact types: `Type::Registrant`, `Type::Admin`, `Type::Tech`, `Type::Billing`.
 
 ### Nameservers
 
 ```php
 use Sensson\Enom\Data\Nameservers;
 
-$nameservers = Enom::domain('example', 'com')->nameservers()->get();
+$nameservers = Enom::domains()->nameservers('example', 'com')->get();
 
-Enom::domain('example', 'com')->nameservers()->update(new Nameservers([
+Enom::domains()->nameservers('example', 'com')->update(new Nameservers([
     'ns1.yourhost.com',
     'ns2.yourhost.com',
 ]));
 
-Enom::domain('example', 'com')->nameservers()->register('ns1.example.com', '1.2.3.4');
-Enom::domain('example', 'com')->nameservers()->delete('ns1.example.com');
+Enom::domains()->nameservers('example', 'com')->register('ns1.example.com', '1.2.3.4');
+Enom::domains()->nameservers('example', 'com')->delete('ns1.example.com');
 ```
 
 `register()` creates a child nameserver (glue record); `delete()` removes one.
@@ -158,9 +153,9 @@ Enom::domain('example', 'com')->nameservers()->delete('ns1.example.com');
 use Sensson\Enom\Data\DnsRecord;
 use Sensson\Enom\Enums\DnsRecordType;
 
-$records = Enom::domain('example', 'com')->dns()->get();
+$records = Enom::domains()->dns('example', 'com')->get();
 
-Enom::domain('example', 'com')->dns()->update([
+Enom::domains()->dns('example', 'com')->update([
     new DnsRecord(hostname: 'www', type: DnsRecordType::A, address: '1.2.3.4', ttl: 300),
     new DnsRecord(hostname: '@', type: DnsRecordType::MX, address: 'mail.example.com', ttl: 300, mx_preference: 10),
     new DnsRecord(hostname: '@', type: DnsRecordType::TXT, address: 'v=spf1 include:example.com ~all', ttl: 300),
@@ -169,15 +164,37 @@ Enom::domain('example', 'com')->dns()->update([
 
 Available record types: `A`, `AAAA`, `CNAME`, `MX`, `NS`, `TXT`.
 
-### Transfer tracking
+### DNSSEC
 
-List all transfer orders for a domain, or look up and cancel an order by its ID:
+Sign a domain with a DS record, or remove one. The current records are returned on the domain by `get()`:
 
 ```php
-$orders = Enom::domain('example', 'com')->transfers()->list();
+use Sensson\Enom\Data\Dnssec;
 
-$order = Enom::transfers()->get('12345');
-Enom::transfers()->cancel('12345');
+$records = Enom::domains()->get('example', 'com')->dnssec;
+
+Enom::domains()->sign('example', 'com', new Dnssec(
+    key_tag: 12345,
+    algorithm: 8,
+    digest_type: 2,
+    digest: 'ABCDEF1234567890',
+));
+
+Enom::domains()->unsign('example', 'com', $records[0]);
+```
+
+Removing a record requires all four values to match what is set at the registry, so pass back a record from
+`get()`.
+
+### Transfer tracking
+
+List all transfer orders for a domain, or look up and cancel an order by its id:
+
+```php
+$orders = Enom::domains()->transfers('example', 'com')->list();
+
+$order = Enom::domains()->transfers('example', 'com')->get('12345');
+Enom::domains()->transfers('example', 'com')->cancel('12345');
 ```
 
 ### Account
@@ -189,6 +206,18 @@ echo $balance->balance;
 echo $balance->currency;
 ```
 
+### Multiple connections
+
+Define extra connections in `config/enom.php` and select one by name, or supply credentials at runtime:
+
+```php
+use Sensson\Enom\Data\Connection;
+
+Enom::connection('reseller2')->domains()->list();
+
+Enom::build(new Connection('username', 'token', sandbox: false))->domains()->list();
+```
+
 ## Testing
 
 Use `fake()` with Saloon's `MockClient`:
@@ -197,17 +226,17 @@ Use `fake()` with Saloon's `MockClient`:
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
 use Sensson\Enom\Facades\Enom;
-use Sensson\Enom\Requests\Domains\CheckDomain;
+use Sensson\Enom\Requests\Domains\ListDomains;
 
 $mock = new MockClient([
-    CheckDomain::class => MockResponse::make('<interface-response><RRPCode>210</RRPCode></interface-response>'),
+    ListDomains::class => MockResponse::make('<interface-response><GetAllDomains></GetAllDomains></interface-response>'),
 ]);
 
 Enom::fake($mock);
 
-$result = Enom::domain('example', 'com')->check();
+Enom::domains()->list();
 
-$mock->assertSent(CheckDomain::class);
+$mock->assertSent(ListDomains::class);
 ```
 
 Run the test suite:

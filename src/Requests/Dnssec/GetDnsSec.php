@@ -2,15 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Sensson\Enom\Requests\Dns;
+namespace Sensson\Enom\Requests\Dnssec;
 
 use Saloon\Http\Response;
-use Sensson\Enom\Data\DnsRecord;
+use Sensson\Enom\Data\Dnssec;
 use Sensson\Enom\Data\DomainName;
-use Sensson\Enom\Enums\DnsRecordType;
 use Sensson\Enom\Requests\EnomRequest;
 
-class GetDnsHosts extends EnomRequest
+class GetDnsSec extends EnomRequest
 {
     public function __construct(
         private readonly DomainName $domain,
@@ -20,7 +19,7 @@ class GetDnsHosts extends EnomRequest
 
     protected function command(): string
     {
-        return 'GetDNSHost';
+        return 'GetDnsSec';
     }
 
     protected function parameters(): array
@@ -31,19 +30,19 @@ class GetDnsHosts extends EnomRequest
         ];
     }
 
-    /** @return array<DnsRecord> */
+    /** @return array<Dnssec> */
     public function createDtoFromResponse(Response $response): array
     {
         $xml = $response->xml();
+
         $records = [];
 
-        foreach ($xml->GetHosts->Host ?? [] as $host) {
-            $records[] = new DnsRecord(
-                hostname: (string) $host->HostName,
-                type: DnsRecordType::from((string) $host->RecordType),
-                address: (string) $host->Address,
-                ttl: (int) $host->TTL,
-                mx_preference: (string) ($host->MXPref ?? '') !== '' ? (int) $host->MXPref : null,
+        foreach ($xml->DnsSecData->KeyData ?? [] as $key) {
+            $records[] = new Dnssec(
+                key_tag: (int) $key->KeyTag,
+                algorithm: (int) $key->Algorithm,
+                digest_type: (int) $key->DigestType,
+                digest: (string) $key->Digest,
             );
         }
 

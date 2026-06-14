@@ -6,7 +6,7 @@ namespace Sensson\Enom\Data;
 
 use Spatie\LaravelData\Data;
 
-final class DomainName extends Data
+class DomainName extends Data
 {
     public function __construct(
         public readonly string $sld,

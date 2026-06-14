@@ -6,7 +6,7 @@ namespace Sensson\Enom\Data;
 
 use Spatie\LaravelData\Data;
 
-final class AccountBalance extends Data
+class AccountBalance extends Data
 {
     public function __construct(
         public readonly float $balance,

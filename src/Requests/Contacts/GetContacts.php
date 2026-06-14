@@ -11,7 +11,7 @@ use Sensson\Enom\Data\DomainName;
 use Sensson\Enom\Requests\EnomRequest;
 use SimpleXMLElement;
 
-final class GetContacts extends EnomRequest
+class GetContacts extends EnomRequest
 {
     public function __construct(
         private readonly DomainName $domain,

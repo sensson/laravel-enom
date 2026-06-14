@@ -29,7 +29,7 @@ it('gets nameservers for a domain', function (): void {
 
     Enom::fake($mock);
 
-    $result = Enom::domain('example', 'com')->nameservers()->get();
+    $result = Enom::domains()->nameservers('example', 'com')->get();
 
     expect($result)
         ->toBeInstanceOf(Nameservers::class)
@@ -51,7 +51,7 @@ it('updates nameservers for a domain', function (): void {
 
     Enom::fake($mock);
 
-    $result = Enom::domain('example', 'com')->nameservers()->update(
+    $result = Enom::domains()->nameservers('example', 'com')->update(
         new Nameservers(['ns1.myhost.com', 'ns2.myhost.com'])
     );
 
@@ -74,7 +74,7 @@ it('registers a child nameserver', function (): void {
 
     Enom::fake($mock);
 
-    Enom::domain('example', 'com')->nameservers()->register('ns1.example.com', '1.2.3.4');
+    Enom::domains()->nameservers('example', 'com')->register('ns1.example.com', '1.2.3.4');
 
     $mock->assertSent(function (RegisterNameserver $request): bool {
         return $request->query()->get('Command') === 'RegisterNameServer'
@@ -90,7 +90,7 @@ it('deletes a child nameserver', function (): void {
 
     Enom::fake($mock);
 
-    Enom::domain('example', 'com')->nameservers()->delete('ns1.example.com');
+    Enom::domains()->nameservers('example', 'com')->delete('ns1.example.com');
 
     $mock->assertSent(function (DeleteNameserver $request): bool {
         return $request->query()->get('Command') === 'DeleteNameServer'

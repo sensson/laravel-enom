@@ -8,7 +8,7 @@ use Saloon\Http\Response;
 use Sensson\Enom\Data\AccountBalance;
 use Sensson\Enom\Requests\EnomRequest;
 
-final class GetBalance extends EnomRequest
+class GetBalance extends EnomRequest
 {
     protected function command(): string
     {

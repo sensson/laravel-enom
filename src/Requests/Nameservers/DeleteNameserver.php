@@ -6,7 +6,7 @@ namespace Sensson\Enom\Requests\Nameservers;
 
 use Sensson\Enom\Requests\EnomRequest;
 
-final class DeleteNameserver extends EnomRequest
+class DeleteNameserver extends EnomRequest
 {
     public function __construct(
         private readonly string $nameserver,

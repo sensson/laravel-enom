@@ -2,24 +2,25 @@
 
 declare(strict_types=1);
 
-namespace Sensson\Enom\Requests\Domains;
+namespace Sensson\Enom\Requests\Dnssec;
 
 use Saloon\Http\Response;
-use Sensson\Enom\Data\DomainAvailability;
+use Sensson\Enom\Data\Dnssec;
 use Sensson\Enom\Data\DomainName;
 use Sensson\Enom\Requests\EnomRequest;
 
-final class CheckDomain extends EnomRequest
+class AddDnsSec extends EnomRequest
 {
     public function __construct(
         private readonly DomainName $domain,
+        private readonly Dnssec $record,
     ) {
         //
     }
 
     protected function command(): string
     {
-        return 'Check';
+        return 'AddDnsSec';
     }
 
     protected function parameters(): array
@@ -27,17 +28,15 @@ final class CheckDomain extends EnomRequest
         return [
             'SLD' => $this->domain->sld,
             'TLD' => $this->domain->tld,
+            'KeyTag' => $this->record->key_tag,
+            'Alg' => $this->record->algorithm,
+            'DigestType' => $this->record->digest_type,
+            'Digest' => $this->record->digest,
         ];
     }
 
-    public function createDtoFromResponse(Response $response): DomainAvailability
+    public function createDtoFromResponse(Response $response): Dnssec
     {
-        $xml = $response->xml();
-
-        return new DomainAvailability(
-            sld: $this->domain->sld,
-            tld: $this->domain->tld,
-            available: (int) $xml->RRPCode === 210,
-        );
+        return $this->record;
     }
 }
