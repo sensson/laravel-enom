@@ -169,6 +169,27 @@ Enom::domain('example', 'com')->dns()->update([
 
 Available record types: `A`, `AAAA`, `CNAME`, `MX`, `NS`, `TXT`.
 
+### DNSSEC
+
+Manage the DS records that link a domain to its DNSSEC keys at the registry:
+
+```php
+use Sensson\Enom\Data\DnssecRecord;
+
+$records = Enom::domain('example', 'com')->dnssec()->get();
+
+Enom::domain('example', 'com')->dnssec()->add(new DnssecRecord(
+    key_tag: 12345,
+    algorithm: 8,
+    digest_type: 2,
+    digest: 'ABCDEF1234567890',
+));
+
+Enom::domain('example', 'com')->dnssec()->remove($records[0]);
+```
+
+Removing a record requires all four values to match what is set at the registry, so pass back a record returned by `get()`.
+
 ### Transfer tracking
 
 List all transfer orders for a domain, or look up and cancel an order by its ID:

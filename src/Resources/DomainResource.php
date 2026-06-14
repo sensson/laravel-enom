@@ -119,6 +119,11 @@ final class DomainResource extends BaseResource
         return new DnsResource($this->connector, $this->domain);
     }
 
+    public function dnssec(): DnssecResource
+    {
+        return new DnssecResource($this->connector, $this->domain);
+    }
+
     public function transfers(): DomainTransferResource
     {
         return new DomainTransferResource($this->connector, $this->domain);
