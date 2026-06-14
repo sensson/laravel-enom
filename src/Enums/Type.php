@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Sensson\Enom\Enums;
 
-enum ContactType: string
+enum Type: string
 {
     case Registrant = 'Registrant';
     case Admin = 'Admin';

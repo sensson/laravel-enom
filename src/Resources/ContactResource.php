@@ -10,11 +10,11 @@ use Saloon\Http\Response;
 use Sensson\Enom\Data\Contact;
 use Sensson\Enom\Data\Contacts;
 use Sensson\Enom\Data\DomainName;
-use Sensson\Enom\Enums\ContactType;
+use Sensson\Enom\Enums\Type;
 use Sensson\Enom\Requests\Contacts\GetContacts;
 use Sensson\Enom\Requests\Contacts\UpdateContacts;
 
-final class ContactResource extends BaseResource
+class ContactResource extends BaseResource
 {
     public function __construct(
         protected readonly Connector $connector,
@@ -28,7 +28,7 @@ final class ContactResource extends BaseResource
         return $this->connector->send(new GetContacts($this->domain))->dto();
     }
 
-    public function update(ContactType $type, Contact $contact): Response
+    public function update(Type $type, Contact $contact): Response
     {
         return $this->connector->send(new UpdateContacts($this->domain, $type, $contact));
     }

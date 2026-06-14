@@ -6,7 +6,7 @@ namespace Sensson\Enom\Data;
 
 use Spatie\LaravelData\Data;
 
-final class DnssecRecord extends Data
+class Dnssec extends Data
 {
     public function __construct(
         public readonly int $key_tag,

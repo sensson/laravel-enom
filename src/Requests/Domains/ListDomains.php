@@ -7,7 +7,7 @@ namespace Sensson\Enom\Requests\Domains;
 use Saloon\Http\Response;
 use Sensson\Enom\Requests\EnomRequest;
 
-final class ListDomains extends EnomRequest
+class ListDomains extends EnomRequest
 {
     protected function command(): string
     {

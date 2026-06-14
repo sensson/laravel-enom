@@ -6,10 +6,10 @@ namespace Sensson\Enom\Requests\Transfers;
 
 use Sensson\Enom\Requests\EnomRequest;
 
-final class CancelTransferOrder extends EnomRequest
+class CancelTransferOrder extends EnomRequest
 {
     public function __construct(
-        private readonly string $orderId,
+        private readonly string $order,
     ) {
         //
     }
@@ -22,7 +22,7 @@ final class CancelTransferOrder extends EnomRequest
     protected function parameters(): array
     {
         return [
-            'TransferOrderID' => $this->orderId,
+            'TransferOrderID' => $this->order,
         ];
     }
 }

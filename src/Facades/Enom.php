@@ -6,14 +6,25 @@ namespace Sensson\Enom\Facades;
 
 use Illuminate\Support\Facades\Facade;
 use Saloon\Http\Faking\MockClient;
+use Sensson\Enom\Data\Connection;
 use Sensson\Enom\Enom as EnomConnector;
+use Sensson\Enom\EnomManager;
+use Sensson\Enom\Resources\AccountResource;
+use Sensson\Enom\Resources\DomainsResource;
 
-/** @see EnomConnector */
+/**
+ * @see EnomManager
+ *
+ * @method static EnomConnector connection(?string $name = null)
+ * @method static EnomConnector build(Connection $connection)
+ * @method static DomainsResource domains()
+ * @method static AccountResource account()
+ */
 class Enom extends Facade
 {
     protected static function getFacadeAccessor(): string
     {
-        return EnomConnector::class;
+        return EnomManager::class;
     }
 
     public static function fake(MockClient $client): EnomConnector

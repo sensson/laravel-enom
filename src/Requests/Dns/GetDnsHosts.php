@@ -10,7 +10,7 @@ use Sensson\Enom\Data\DomainName;
 use Sensson\Enom\Enums\DnsRecordType;
 use Sensson\Enom\Requests\EnomRequest;
 
-final class GetDnsHosts extends EnomRequest
+class GetDnsHosts extends EnomRequest
 {
     public function __construct(
         private readonly DomainName $domain,

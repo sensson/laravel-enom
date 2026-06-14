@@ -6,7 +6,7 @@ namespace Sensson\Enom\Requests\Nameservers;
 
 use Sensson\Enom\Requests\EnomRequest;
 
-final class RegisterNameserver extends EnomRequest
+class RegisterNameserver extends EnomRequest
 {
     public function __construct(
         private readonly string $nameserver,

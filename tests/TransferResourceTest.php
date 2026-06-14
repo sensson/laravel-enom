@@ -31,11 +31,11 @@ it('gets a transfer order by id', function (): void {
 
     Enom::fake($mock);
 
-    $result = Enom::transfers()->get('12345');
+    $result = Enom::domains()->transfers('example', 'com')->get('12345');
 
     expect($result)
         ->toBeInstanceOf(TransferOrder::class)
-        ->order_id->toBe('12345')
+        ->order->toBe('12345')
         ->sld->toBe('example')
         ->tld->toBe('com')
         ->status->toBe('Active')
@@ -72,7 +72,7 @@ it('gets transfer orders for a domain', function (): void {
 
     Enom::fake($mock);
 
-    $result = Enom::domain('example', 'com')->transfers()->list();
+    $result = Enom::domains()->transfers('example', 'com')->list();
 
     expect($result)
         ->toBeArray()
@@ -80,7 +80,7 @@ it('gets transfer orders for a domain', function (): void {
 
     expect($result[0])
         ->toBeInstanceOf(TransferOrder::class)
-        ->order_id->toBe('12345')
+        ->order->toBe('12345')
         ->status->toBe('Active');
 
     $mock->assertSent(function (GetTransferOrdersByDomain $request): bool {
@@ -97,7 +97,7 @@ it('cancels a transfer order', function (): void {
 
     Enom::fake($mock);
 
-    Enom::transfers()->cancel('12345');
+    Enom::domains()->transfers('example', 'com')->cancel('12345');
 
     $mock->assertSent(function (CancelTransferOrder $request): bool {
         return $request->query()->get('Command') === 'TP_CancelOrder'

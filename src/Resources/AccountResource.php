@@ -8,7 +8,7 @@ use Saloon\Http\BaseResource;
 use Sensson\Enom\Data\AccountBalance;
 use Sensson\Enom\Requests\Account\GetBalance;
 
-final class AccountResource extends BaseResource
+class AccountResource extends BaseResource
 {
     public function balance(): AccountBalance
     {

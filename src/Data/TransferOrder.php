@@ -6,10 +6,10 @@ namespace Sensson\Enom\Data;
 
 use Spatie\LaravelData\Data;
 
-final class TransferOrder extends Data
+class TransferOrder extends Data
 {
     public function __construct(
-        public readonly string $order_id,
+        public readonly string $order,
         public readonly string $sld,
         public readonly string $tld,
         public readonly ?string $status = null,

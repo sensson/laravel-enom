@@ -9,7 +9,7 @@ use Sensson\Enom\Data\DomainName;
 use Sensson\Enom\Data\Nameservers;
 use Sensson\Enom\Requests\EnomRequest;
 
-final class GetNameservers extends EnomRequest
+class GetNameservers extends EnomRequest
 {
     public function __construct(
         private readonly DomainName $domain,

@@ -6,7 +6,7 @@ namespace Sensson\Enom\Data;
 
 use Spatie\LaravelData\Data;
 
-final class AuthCode extends Data
+class AuthCode extends Data
 {
     public function __construct(
         public readonly string $sld,

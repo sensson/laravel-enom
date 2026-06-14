@@ -5,15 +5,15 @@ declare(strict_types=1);
 namespace Sensson\Enom\Requests\Dnssec;
 
 use Saloon\Http\Response;
-use Sensson\Enom\Data\DnssecRecord;
+use Sensson\Enom\Data\Dnssec;
 use Sensson\Enom\Data\DomainName;
 use Sensson\Enom\Requests\EnomRequest;
 
-final class DeleteDnsSec extends EnomRequest
+class DeleteDnsSec extends EnomRequest
 {
     public function __construct(
         private readonly DomainName $domain,
-        private readonly DnssecRecord $record,
+        private readonly Dnssec $record,
     ) {
         //
     }
@@ -35,7 +35,7 @@ final class DeleteDnsSec extends EnomRequest
         ];
     }
 
-    public function createDtoFromResponse(Response $response): DnssecRecord
+    public function createDtoFromResponse(Response $response): Dnssec
     {
         return $this->record;
     }

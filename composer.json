@@ -24,8 +24,9 @@
         "spatie/laravel-package-tools": "^1.16"
     },
     "require-dev": {
-        "laravel/pint": "^1.14",
+        "driftingly/rector-laravel": "^2.5",
         "larastan/larastan": "^3.0",
+        "laravel/pint": "^1.14",
         "nunomaduro/collision": "^8.8",
         "orchestra/testbench": "^10.0|^11.0",
         "pestphp/pest": "^4.0",
@@ -33,7 +34,8 @@
         "pestphp/pest-plugin-laravel": "^4.0",
         "phpstan/extension-installer": "^1.4",
         "phpstan/phpstan-deprecation-rules": "^2.0",
-        "phpstan/phpstan-phpunit": "^2.0"
+        "phpstan/phpstan-phpunit": "^2.0",
+        "rector/rector": "^2.4"
     },
     "autoload": {
         "psr-4": {
@@ -42,27 +44,18 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Sensson\\Enom\\Tests\\": "tests/",
-            "Workbench\\App\\": "workbench/app/"
+            "Rector\\Enom\\": "rector/",
+            "Sensson\\Enom\\Tests\\": "tests/"
         }
     },
     "scripts": {
         "post-autoload-dump": "@composer run prepare",
-        "clear": "@php vendor/bin/testbench package:purge-laravel-enom --ansi",
         "prepare": "@php vendor/bin/testbench package:discover --ansi",
-        "build": [
-            "@composer run prepare",
-            "@php vendor/bin/testbench workbench:build --ansi"
-        ],
-        "start": [
-            "Composer\\Config::disableProcessTimeout",
-            "@composer run build",
-            "@php vendor/bin/testbench serve"
-        ],
         "analyse": "vendor/bin/phpstan analyse",
         "test": "vendor/bin/pest",
         "test-coverage": "vendor/bin/pest --coverage",
-        "format": "vendor/bin/pint"
+        "format": "vendor/bin/pint",
+        "rector": "vendor/bin/rector"
     },
     "config": {
         "sort-packages": true,

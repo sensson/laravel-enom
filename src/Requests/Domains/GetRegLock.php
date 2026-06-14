@@ -9,7 +9,7 @@ use Sensson\Enom\Data\DomainLock;
 use Sensson\Enom\Data\DomainName;
 use Sensson\Enom\Requests\EnomRequest;
 
-final class GetRegLock extends EnomRequest
+class GetRegLock extends EnomRequest
 {
     public function __construct(
         private readonly DomainName $domain,

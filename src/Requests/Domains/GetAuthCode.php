@@ -9,7 +9,7 @@ use Sensson\Enom\Data\AuthCode;
 use Sensson\Enom\Data\DomainName;
 use Sensson\Enom\Requests\EnomRequest;
 
-final class GetAuthCode extends EnomRequest
+class GetAuthCode extends EnomRequest
 {
     public function __construct(
         private readonly DomainName $domain,

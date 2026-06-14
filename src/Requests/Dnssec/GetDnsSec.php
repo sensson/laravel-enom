@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Sensson\Enom\Requests\Dnssec;
 
 use Saloon\Http\Response;
-use Sensson\Enom\Data\DnssecRecord;
+use Sensson\Enom\Data\Dnssec;
 use Sensson\Enom\Data\DomainName;
 use Sensson\Enom\Requests\EnomRequest;
 
-final class GetDnsSec extends EnomRequest
+class GetDnsSec extends EnomRequest
 {
     public function __construct(
         private readonly DomainName $domain,
@@ -30,7 +30,7 @@ final class GetDnsSec extends EnomRequest
         ];
     }
 
-    /** @return array<DnssecRecord> */
+    /** @return array<Dnssec> */
     public function createDtoFromResponse(Response $response): array
     {
         $xml = $response->xml();
@@ -38,7 +38,7 @@ final class GetDnsSec extends EnomRequest
         $records = [];
 
         foreach ($xml->DnsSecData->KeyData ?? [] as $key) {
-            $records[] = new DnssecRecord(
+            $records[] = new Dnssec(
                 key_tag: (int) $key->KeyTag,
                 algorithm: (int) $key->Algorithm,
                 digest_type: (int) $key->DigestType,

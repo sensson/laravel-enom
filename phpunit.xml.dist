@@ -16,9 +16,8 @@
     backupStaticProperties="false"
 >
     <testsuites>
-        <testsuite name="Sensson Test Suite">
+        <testsuite name="Tests">
             <directory>tests</directory>
-            <exclude>tests/Integration</exclude>
         </testsuite>
     </testsuites>
     <logging>

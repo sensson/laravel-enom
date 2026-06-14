@@ -13,15 +13,11 @@ class EnomServiceProvider extends PackageServiceProvider
     {
         $package
             ->name('laravel-enom')
-            ->hasConfigFile();
+            ->hasConfigFile('enom');
     }
 
     public function packageRegistered(): void
     {
-        $this->app->singleton(Enom::class, fn (): Enom => new Enom(
-            username: config()->string('enom.username'),
-            token: config()->string('enom.token'),
-            sandbox: config()->boolean('enom.sandbox', true),
-        ));
+        $this->app->singleton(EnomManager::class);
     }
 }

@@ -9,7 +9,7 @@ use Sensson\Enom\Data\DomainName;
 use Sensson\Enom\Data\DomainTransfer;
 use Sensson\Enom\Requests\EnomRequest;
 
-final class TransferDomain extends EnomRequest
+class TransferDomain extends EnomRequest
 {
     public function __construct(
         private readonly DomainName $domain,
@@ -40,7 +40,7 @@ final class TransferDomain extends EnomRequest
         return new DomainTransfer(
             sld: $this->domain->sld,
             tld: $this->domain->tld,
-            order_id: (string) ($xml->OrderID ?? null) ?: null,
+            order: (string) ($xml->OrderID ?? null) ?: null,
             status_id: (string) ($xml->TransferOrder->statusid ?? null) ?: null,
         );
     }

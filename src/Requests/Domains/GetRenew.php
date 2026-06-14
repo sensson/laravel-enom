@@ -8,7 +8,7 @@ use Saloon\Http\Response;
 use Sensson\Enom\Data\DomainName;
 use Sensson\Enom\Requests\EnomRequest;
 
-final class GetRenew extends EnomRequest
+class GetRenew extends EnomRequest
 {
     public function __construct(
         private readonly DomainName $domain,
