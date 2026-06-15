@@ -20,7 +20,7 @@ class GetBalance extends EnomRequest
         $xml = $response->xml();
 
         return new AccountBalance(
-            balance: (float) $xml->balance,
+            amount: (float) $xml->balance,
             currency: (string) ($xml->currency ?? 'USD'),
         );
     }

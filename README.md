@@ -39,7 +39,7 @@ top-level label, e.g. `Enom::domains()->get('example', 'com')` for `example.com`
 ```php
 use Sensson\Enom\Facades\Enom;
 
-$domain = Enom::domains()->get('example', 'com');   // status, expiration, auto_renew, dnssec
+$domain = Enom::domains()->get('example', 'com');   // status, expires_at, dnssec
 $domains = Enom::domains()->list();
 Enom::domains()->renew('example', 'com', years: 2);
 ```
@@ -98,14 +98,6 @@ $authCode = Enom::domains()->getAuthCode('example', 'com');
 echo $authCode->code;
 ```
 
-#### Auto-renew
-
-```php
-Enom::domains()->setAutoRenew('example', 'com', true);
-
-$enabled = Enom::domains()->getAutoRenew('example', 'com');
-```
-
 #### Push to another account
 
 ```php
@@ -145,25 +137,6 @@ Enom::domains()->nameservers('example', 'com')->delete('ns1.example.com');
 
 `register()` creates a child nameserver (glue record); `delete()` removes one.
 
-### DNS records
-
-`update()` replaces all existing records for the domain:
-
-```php
-use Sensson\Enom\Data\DnsRecord;
-use Sensson\Enom\Enums\DnsRecordType;
-
-$records = Enom::domains()->dns('example', 'com')->get();
-
-Enom::domains()->dns('example', 'com')->update([
-    new DnsRecord(hostname: 'www', type: DnsRecordType::A, address: '1.2.3.4', ttl: 300),
-    new DnsRecord(hostname: '@', type: DnsRecordType::MX, address: 'mail.example.com', ttl: 300, mx_preference: 10),
-    new DnsRecord(hostname: '@', type: DnsRecordType::TXT, address: 'v=spf1 include:example.com ~all', ttl: 300),
-]);
-```
-
-Available record types: `A`, `AAAA`, `CNAME`, `MX`, `NS`, `TXT`.
-
 ### DNSSEC
 
 Sign a domain with a DS record, or remove one. The current records are returned on the domain by `get()`:
@@ -202,7 +175,7 @@ Enom::domains()->transfers('example', 'com')->cancel('12345');
 ```php
 $balance = Enom::account()->balance();
 
-echo $balance->balance;
+echo $balance->amount;
 echo $balance->currency;
 ```
 
