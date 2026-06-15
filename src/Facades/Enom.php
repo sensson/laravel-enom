@@ -19,6 +19,7 @@ use Sensson\Enom\Resources\DomainsResource;
  * @method static EnomConnector build(Connection $connection)
  * @method static DomainsResource domains()
  * @method static AccountResource account()
+ * @method static void test()
  */
 class Enom extends Facade
 {

@@ -26,3 +26,15 @@ it('gets the account balance', function (): void {
         return $request->query()->get('Command') === 'GetBalance';
     });
 });
+
+it('validates the connection with test', function (): void {
+    $mock = new MockClient([
+        GetBalance::class => MockResponse::make('<interface-response><balance>250.00</balance><currency>USD</currency></interface-response>'),
+    ]);
+
+    Enom::fake($mock);
+
+    Enom::test();
+
+    $mock->assertSent(GetBalance::class);
+});
