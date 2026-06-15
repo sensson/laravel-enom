@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
-use Sensson\Enom\Data\Nameservers;
+use Sensson\Enom\Data\Nameserver;
 use Sensson\Enom\Facades\Enom;
 use Sensson\Enom\Requests\Nameservers\DeleteNameserver;
 use Sensson\Enom\Requests\Nameservers\GetNameservers;
@@ -31,11 +31,11 @@ it('gets nameservers for a domain', function (): void {
 
     $result = Enom::domains()->nameservers('example', 'com')->get();
 
-    expect($result)
-        ->toBeInstanceOf(Nameservers::class)
-        ->nameservers->toHaveCount(2)
-        ->nameservers->toContain('ns1.example.com')
-        ->nameservers->toContain('ns2.example.com');
+    expect($result)->toBeArray()->toHaveCount(2);
+    expect($result[0])->toBeInstanceOf(Nameserver::class);
+    expect(array_map(fn (Nameserver $nameserver): string => $nameserver->host, $result))
+        ->toContain('ns1.example.com')
+        ->toContain('ns2.example.com');
 
     $mock->assertSent(function (GetNameservers $request): bool {
         return $request->query()->get('Command') === 'GetDNS'
@@ -51,14 +51,15 @@ it('updates nameservers for a domain', function (): void {
 
     Enom::fake($mock);
 
-    $result = Enom::domains()->nameservers('example', 'com')->update(
-        new Nameservers(['ns1.myhost.com', 'ns2.myhost.com'])
-    );
+    $result = Enom::domains()->nameservers('example', 'com')->update([
+        new Nameserver('ns1.myhost.com'),
+        new Nameserver('ns2.myhost.com'),
+    ]);
 
-    expect($result)
-        ->toBeInstanceOf(Nameservers::class)
-        ->nameservers->toContain('ns1.myhost.com')
-        ->nameservers->toContain('ns2.myhost.com');
+    expect($result)->toBeArray();
+    expect(array_map(fn (Nameserver $nameserver): string => $nameserver->host, $result))
+        ->toContain('ns1.myhost.com')
+        ->toContain('ns2.myhost.com');
 
     $mock->assertSent(function (UpdateNameservers $request): bool {
         return $request->query()->get('Command') === 'ModifyNS'

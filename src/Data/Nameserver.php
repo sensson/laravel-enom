@@ -6,11 +6,11 @@ namespace Sensson\Enom\Data;
 
 use Spatie\LaravelData\Data;
 
-class Nameservers extends Data
+class Nameserver extends Data
 {
-    /** @param array<string> $nameservers */
     public function __construct(
-        public readonly array $nameservers,
+        public readonly string $host,
+        public readonly ?string $ip = null,
     ) {
         //
     }

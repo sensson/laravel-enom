@@ -7,7 +7,7 @@ namespace Sensson\Enom\Resources;
 use Saloon\Http\BaseResource;
 use Saloon\Http\Connector;
 use Sensson\Enom\Data\DomainName;
-use Sensson\Enom\Data\Nameservers;
+use Sensson\Enom\Data\Nameserver;
 use Sensson\Enom\Requests\Nameservers\DeleteNameserver;
 use Sensson\Enom\Requests\Nameservers\GetNameservers;
 use Sensson\Enom\Requests\Nameservers\RegisterNameserver;
@@ -22,12 +22,19 @@ class NameserverResource extends BaseResource
         //
     }
 
-    public function get(): Nameservers
+    /**
+     * @return array<Nameserver>
+     */
+    public function get(): array
     {
         return $this->connector->send(new GetNameservers($this->domain))->dto();
     }
 
-    public function update(Nameservers $nameservers): Nameservers
+    /**
+     * @param  array<Nameserver>  $nameservers
+     * @return array<Nameserver>
+     */
+    public function update(array $nameservers): array
     {
         return $this->connector->send(new UpdateNameservers($this->domain, $nameservers))->dto();
     }

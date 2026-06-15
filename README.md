@@ -34,6 +34,9 @@ Set `ENOM_SANDBOX=false` when you're ready to use the live environment.
 All resources are accessed through the `Enom` facade. A domain is addressed by its second-level and
 top-level label, e.g. `Enom::domains()->get('example', 'com')` for `example.com`.
 
+State-changing operations (locking, signing, transfers, …) return nothing: they throw a typed exception on
+failure, so a normal return means the registry confirmed success.
+
 ### Domains
 
 ```php
@@ -122,14 +125,14 @@ Available contact types: `Type::Registrant`, `Type::Admin`, `Type::Tech`, `Type:
 ### Nameservers
 
 ```php
-use Sensson\Enom\Data\Nameservers;
+use Sensson\Enom\Data\Nameserver;
 
-$nameservers = Enom::domains()->nameservers('example', 'com')->get();
+$nameservers = Enom::domains()->nameservers('example', 'com')->get(); // array of Nameserver (->host, ->ip)
 
-Enom::domains()->nameservers('example', 'com')->update(new Nameservers([
-    'ns1.yourhost.com',
-    'ns2.yourhost.com',
-]));
+Enom::domains()->nameservers('example', 'com')->update([
+    new Nameserver('ns1.yourhost.com'),
+    new Nameserver('ns2.yourhost.com'),
+]);
 
 Enom::domains()->nameservers('example', 'com')->register('ns1.example.com', '1.2.3.4');
 Enom::domains()->nameservers('example', 'com')->delete('ns1.example.com');

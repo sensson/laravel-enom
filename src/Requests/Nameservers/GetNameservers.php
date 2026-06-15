@@ -6,7 +6,7 @@ namespace Sensson\Enom\Requests\Nameservers;
 
 use Saloon\Http\Response;
 use Sensson\Enom\Data\DomainName;
-use Sensson\Enom\Data\Nameservers;
+use Sensson\Enom\Data\Nameserver;
 use Sensson\Enom\Requests\EnomRequest;
 
 class GetNameservers extends EnomRequest
@@ -30,7 +30,10 @@ class GetNameservers extends EnomRequest
         ];
     }
 
-    public function createDtoFromResponse(Response $response): Nameservers
+    /**
+     * @return array<Nameserver>
+     */
+    public function createDtoFromResponse(Response $response): array
     {
         $xml = $response->xml()->GetDNS->dns;
         $nameservers = [];
@@ -40,10 +43,10 @@ class GetNameservers extends EnomRequest
             $value = (string) ($xml->{$key} ?? null);
 
             if ($value !== '') {
-                $nameservers[] = $value;
+                $nameservers[] = new Nameserver(host: $value);
             }
         }
 
-        return new Nameservers(nameservers: $nameservers);
+        return $nameservers;
     }
 }

@@ -9,7 +9,7 @@ use Spatie\LaravelData\Data;
 class Domain extends Data
 {
     /**
-     * @param  array<string>  $nameservers
+     * @param  array<Nameserver>  $nameservers
      * @param  array<Dnssec>  $dnssec
      */
     public function __construct(
