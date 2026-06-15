@@ -67,6 +67,11 @@ class Enom extends Connector
         return new AccountResource($this);
     }
 
+    public function test(): void
+    {
+        $this->account()->balance();
+    }
+
     /**
      * Enom returns HTTP 200 even on failure, with the error inside the XML body.
      */
