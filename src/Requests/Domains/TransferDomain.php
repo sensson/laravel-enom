@@ -12,8 +12,8 @@ use Sensson\Enom\Requests\EnomRequest;
 class TransferDomain extends EnomRequest
 {
     public function __construct(
-        private readonly DomainName $domain,
-        private readonly string $code,
+        protected DomainName $domain,
+        protected string $code,
     ) {
         //
     }

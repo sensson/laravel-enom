@@ -13,12 +13,12 @@ use Sensson\Enom\Requests\EnomRequest;
 class RegisterDomain extends EnomRequest
 {
     public function __construct(
-        private readonly DomainName $domain,
-        private readonly Contact $registrant,
-        private readonly ?Contact $admin = null,
-        private readonly ?Contact $tech = null,
-        private readonly ?Contact $billing = null,
-        private readonly int $years = 1,
+        protected DomainName $domain,
+        protected Contact $registrant,
+        protected ?Contact $admin = null,
+        protected ?Contact $tech = null,
+        protected ?Contact $billing = null,
+        protected int $years = 1,
     ) {
         //
     }

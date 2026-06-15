@@ -9,7 +9,7 @@ use Spatie\LaravelData\Data;
 class Contact extends Data
 {
     public function __construct(
-        public readonly ?string $handle = null,
+        public ?string $handle = null,
         public string $first_name = '',
         public string $last_name = '',
         public ?string $organization = null,

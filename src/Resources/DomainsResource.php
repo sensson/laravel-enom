@@ -107,18 +107,18 @@ class DomainsResource extends BaseResource
         $this->connector->send(new PushDomain(new DomainName($sld, $tld), $account));
     }
 
-    public function contacts(string $sld, string $tld): ContactResource
+    public function contacts(): ContactResource
     {
-        return new ContactResource($this->connector, new DomainName($sld, $tld));
+        return new ContactResource($this->connector);
     }
 
-    public function nameservers(string $sld, string $tld): NameserverResource
+    public function nameservers(): NameserverResource
     {
-        return new NameserverResource($this->connector, new DomainName($sld, $tld));
+        return new NameserverResource($this->connector);
     }
 
-    public function transfers(string $sld, string $tld): TransferResource
+    public function transfers(): TransferResource
     {
-        return new TransferResource($this->connector, new DomainName($sld, $tld));
+        return new TransferResource($this->connector);
     }
 }

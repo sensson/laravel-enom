@@ -12,7 +12,7 @@ use Sensson\Enom\Requests\EnomRequest;
 class GetAuthCode extends EnomRequest
 {
     public function __construct(
-        private readonly DomainName $domain,
+        protected DomainName $domain,
     ) {
         //
     }

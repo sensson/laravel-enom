@@ -12,8 +12,8 @@ use Sensson\Enom\Requests\EnomRequest;
 class AddDnsSec extends EnomRequest
 {
     public function __construct(
-        private readonly DomainName $domain,
-        private readonly Dnssec $record,
+        protected DomainName $domain,
+        protected Dnssec $record,
     ) {
         //
     }

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Sensson\Enom\Resources;
 
 use Saloon\Http\BaseResource;
-use Saloon\Http\Connector;
 use Saloon\Http\Response;
 use Sensson\Enom\Data\Contact;
 use Sensson\Enom\Data\Contacts;
@@ -16,20 +15,13 @@ use Sensson\Enom\Requests\Contacts\UpdateContacts;
 
 class ContactResource extends BaseResource
 {
-    public function __construct(
-        protected readonly Connector $connector,
-        protected readonly DomainName $domain,
-    ) {
-        //
+    public function get(string $sld, string $tld): Contacts
+    {
+        return $this->connector->send(new GetContacts(new DomainName($sld, $tld)))->dto();
     }
 
-    public function get(): Contacts
+    public function update(string $sld, string $tld, Type $type, Contact $contact): Response
     {
-        return $this->connector->send(new GetContacts($this->domain))->dto();
-    }
-
-    public function update(Type $type, Contact $contact): Response
-    {
-        return $this->connector->send(new UpdateContacts($this->domain, $type, $contact));
+        return $this->connector->send(new UpdateContacts(new DomainName($sld, $tld), $type, $contact));
     }
 }

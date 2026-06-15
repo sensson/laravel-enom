@@ -9,9 +9,9 @@ use Spatie\LaravelData\Data;
 class Connection extends Data
 {
     public function __construct(
-        public readonly string $username,
-        public readonly string $token,
-        public readonly bool $sandbox = true,
+        public string $username,
+        public string $token,
+        public bool $sandbox = true,
     ) {
         //
     }

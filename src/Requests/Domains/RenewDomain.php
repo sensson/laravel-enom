@@ -12,8 +12,8 @@ use Sensson\Enom\Requests\EnomRequest;
 class RenewDomain extends EnomRequest
 {
     public function __construct(
-        private readonly DomainName $domain,
-        private readonly int $years = 1,
+        protected DomainName $domain,
+        protected int $years = 1,
     ) {
         //
     }

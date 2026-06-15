@@ -12,8 +12,8 @@ use Sensson\Enom\Requests\EnomRequest;
 class SetRegLock extends EnomRequest
 {
     public function __construct(
-        private readonly DomainName $domain,
-        private readonly bool $locked,
+        protected DomainName $domain,
+        protected bool $locked,
     ) {
         //
     }

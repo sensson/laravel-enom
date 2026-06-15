@@ -9,10 +9,10 @@ use Spatie\LaravelData\Data;
 class AccountBalance extends Data
 {
     public function __construct(
-        public readonly float $amount,
-        public readonly ?float $credit = null,
-        public readonly ?float $credit_threshold = null,
-        public readonly string $currency = 'USD',
+        public float $amount,
+        public ?float $credit = null,
+        public ?float $credit_threshold = null,
+        public string $currency = 'USD',
     ) {
         //
     }

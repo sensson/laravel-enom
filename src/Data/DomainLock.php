@@ -9,9 +9,9 @@ use Spatie\LaravelData\Data;
 class DomainLock extends Data
 {
     public function __construct(
-        public readonly string $sld,
-        public readonly string $tld,
-        public readonly bool $locked,
+        public string $sld,
+        public string $tld,
+        public bool $locked,
     ) {
         //
     }

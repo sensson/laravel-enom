@@ -9,10 +9,10 @@ use Spatie\LaravelData\Data;
 class Contacts extends Data
 {
     public function __construct(
-        public readonly Contact $registrant,
-        public readonly Contact $admin,
-        public readonly Contact $tech,
-        public readonly Contact $billing,
+        public Contact $registrant,
+        public Contact $admin,
+        public Contact $tech,
+        public Contact $billing,
     ) {
         //
     }

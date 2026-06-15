@@ -13,20 +13,20 @@ class Domain extends Data
      * @param  array<Dnssec>  $dnssec
      */
     public function __construct(
-        public readonly string $sld,
-        public readonly string $tld,
-        public readonly ?string $status = null,
-        public readonly ?string $registrant = null,
-        public readonly ?string $admin_contact = null,
-        public readonly ?string $tech_contact = null,
-        public readonly ?string $billing_contact = null,
-        public readonly array $nameservers = [],
-        public readonly ?bool $locked = null,
-        public readonly ?string $created_at = null,
-        public readonly ?string $updated_at = null,
-        public readonly ?string $expires_at = null,
-        public readonly ?string $auth_code = null,
-        public readonly array $dnssec = [],
+        public string $sld,
+        public string $tld,
+        public ?string $status = null,
+        public ?string $registrant = null,
+        public ?string $admin_contact = null,
+        public ?string $tech_contact = null,
+        public ?string $billing_contact = null,
+        public array $nameservers = [],
+        public ?bool $locked = null,
+        public ?string $created_at = null,
+        public ?string $updated_at = null,
+        public ?string $expires_at = null,
+        public ?string $auth_code = null,
+        public array $dnssec = [],
     ) {
         //
     }

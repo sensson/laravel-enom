@@ -9,8 +9,8 @@ use Spatie\LaravelData\Data;
 class Nameserver extends Data
 {
     public function __construct(
-        public readonly string $host,
-        public readonly ?string $ip = null,
+        public string $host,
+        public ?string $ip = null,
     ) {
         //
     }

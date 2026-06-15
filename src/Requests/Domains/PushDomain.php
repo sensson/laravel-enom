@@ -10,8 +10,8 @@ use Sensson\Enom\Requests\EnomRequest;
 class PushDomain extends EnomRequest
 {
     public function __construct(
-        private readonly DomainName $domain,
-        private readonly string $account,
+        protected DomainName $domain,
+        protected string $account,
     ) {
         //
     }

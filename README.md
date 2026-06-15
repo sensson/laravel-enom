@@ -112,12 +112,12 @@ Enom::domains()->push('example', 'com', 'other-reseller-account');
 ```php
 use Sensson\Enom\Enums\Type;
 
-$contacts = Enom::domains()->contacts('example', 'com')->get();
+$contacts = Enom::domains()->contacts()->get('example', 'com');
 
 echo $contacts->registrant->first_name;
 echo $contacts->admin->email;
 
-Enom::domains()->contacts('example', 'com')->update(Type::Admin, $contact);
+Enom::domains()->contacts()->update('example', 'com', Type::Admin, $contact);
 ```
 
 Available contact types: `Type::Registrant`, `Type::Admin`, `Type::Tech`, `Type::Billing`.
@@ -127,18 +127,13 @@ Available contact types: `Type::Registrant`, `Type::Admin`, `Type::Tech`, `Type:
 ```php
 use Sensson\Enom\Data\Nameserver;
 
-$nameservers = Enom::domains()->nameservers('example', 'com')->get(); // array of Nameserver (->host, ->ip)
+$nameservers = Enom::domains()->nameservers()->get('example', 'com'); // array of Nameserver (->host, ->ip)
 
-Enom::domains()->nameservers('example', 'com')->update([
+Enom::domains()->nameservers()->update('example', 'com', [
     new Nameserver('ns1.yourhost.com'),
     new Nameserver('ns2.yourhost.com'),
 ]);
-
-Enom::domains()->nameservers('example', 'com')->register('ns1.example.com', '1.2.3.4');
-Enom::domains()->nameservers('example', 'com')->delete('ns1.example.com');
 ```
-
-`register()` creates a child nameserver (glue record); `delete()` removes one.
 
 ### DNSSEC
 
@@ -167,10 +162,10 @@ Removing a record requires all four values to match what is set at the registry,
 List all transfer orders for a domain, or look up and cancel an order by its id:
 
 ```php
-$orders = Enom::domains()->transfers('example', 'com')->list();
+$orders = Enom::domains()->transfers()->list('example', 'com');
 
-$order = Enom::domains()->transfers('example', 'com')->get('12345');
-Enom::domains()->transfers('example', 'com')->cancel('12345');
+$order = Enom::domains()->transfers()->get('12345');
+Enom::domains()->transfers()->cancel('12345');
 ```
 
 ### Account

@@ -11,7 +11,7 @@ use Sensson\Enom\Requests\EnomRequest;
 class GetTransferOrder extends EnomRequest
 {
     public function __construct(
-        private readonly string $order,
+        protected string $order,
     ) {
         //
     }

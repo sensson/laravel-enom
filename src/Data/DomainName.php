@@ -9,8 +9,8 @@ use Spatie\LaravelData\Data;
 class DomainName extends Data
 {
     public function __construct(
-        public readonly string $sld,
-        public readonly string $tld,
+        public string $sld,
+        public string $tld,
     ) {
         //
     }

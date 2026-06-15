@@ -18,9 +18,9 @@ class Enom extends Connector
     use AlwaysThrowOnErrors;
 
     public function __construct(
-        protected readonly string $username,
-        protected readonly string $token,
-        protected readonly bool $sandbox = true,
+        protected string $username,
+        protected string $token,
+        protected bool $sandbox = true,
     ) {
         //
     }
@@ -70,7 +70,7 @@ class Enom extends Connector
     /**
      * Enom returns HTTP 200 even on failure, with the error inside the XML body.
      */
-    private function errorMessage(Response $response): ?string
+    protected function errorMessage(Response $response): ?string
     {
         $xml = $response->xml();
 

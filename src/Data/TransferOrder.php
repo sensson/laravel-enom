@@ -9,11 +9,11 @@ use Spatie\LaravelData\Data;
 class TransferOrder extends Data
 {
     public function __construct(
-        public readonly string $order,
-        public readonly string $sld,
-        public readonly string $tld,
-        public readonly ?string $status = null,
-        public readonly ?string $status_id = null,
+        public string $order,
+        public string $sld,
+        public string $tld,
+        public ?string $status = null,
+        public ?string $status_id = null,
     ) {
         //
     }

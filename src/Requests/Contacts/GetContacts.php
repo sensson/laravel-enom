@@ -14,7 +14,7 @@ use SimpleXMLElement;
 class GetContacts extends EnomRequest
 {
     public function __construct(
-        private readonly DomainName $domain,
+        protected DomainName $domain,
     ) {
         //
     }
@@ -44,7 +44,7 @@ class GetContacts extends EnomRequest
         );
     }
 
-    private function parseContact(SimpleXMLElement $node): Contact
+    protected function parseContact(SimpleXMLElement $node): Contact
     {
         return new Contact(
             first_name: (string) $node->FirstName,

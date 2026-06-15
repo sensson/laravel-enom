@@ -15,8 +15,8 @@ class UpdateNameservers extends EnomRequest
      * @param  array<Nameserver>  $nameservers
      */
     public function __construct(
-        private readonly DomainName $domain,
-        private readonly array $nameservers,
+        protected DomainName $domain,
+        protected array $nameservers,
     ) {
         //
     }

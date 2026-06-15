@@ -12,9 +12,9 @@ use Sensson\Enom\Requests\EnomRequest;
 class UpdateContacts extends EnomRequest
 {
     public function __construct(
-        private readonly DomainName $domain,
-        private readonly Type $type,
-        private readonly Contact $contact,
+        protected DomainName $domain,
+        protected Type $type,
+        protected Contact $contact,
     ) {
         //
     }
