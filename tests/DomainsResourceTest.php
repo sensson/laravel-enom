@@ -16,13 +16,11 @@ use Sensson\Enom\Requests\Dnssec\GetDnsSec;
 use Sensson\Enom\Requests\Domains\GetAuthCode;
 use Sensson\Enom\Requests\Domains\GetDomain;
 use Sensson\Enom\Requests\Domains\GetRegLock;
-use Sensson\Enom\Requests\Domains\GetRenew;
 use Sensson\Enom\Requests\Domains\ListDomains;
 use Sensson\Enom\Requests\Domains\PushDomain;
 use Sensson\Enom\Requests\Domains\RegisterDomain;
 use Sensson\Enom\Requests\Domains\RenewDomain;
 use Sensson\Enom\Requests\Domains\SetRegLock;
-use Sensson\Enom\Requests\Domains\SetRenew;
 use Sensson\Enom\Requests\Domains\TransferDomain;
 
 it('registers a domain', function (): void {
@@ -123,7 +121,7 @@ it('gets domain info including dnssec', function (): void {
         ->sld->toBe('example')
         ->tld->toBe('com')
         ->status->toBe('Registered')
-        ->expiration->toBe('2026-01-01')
+        ->expires_at->toBe('2026-01-01')
         ->dnssec->toHaveCount(1);
 
     expect($result->dnssec[0])
@@ -161,7 +159,8 @@ it('transfers a domain', function (): void {
 
     expect($result)
         ->toBeInstanceOf(DomainTransfer::class)
-        ->order->toBe('12345');
+        ->name()->toBe('example.com')
+        ->status->toBe('1');
 
     $mock->assertSent(function (TransferDomain $request): bool {
         return $request->query()->get('Command') === 'TP_CreateOrder'
@@ -268,31 +267,6 @@ it('unlocks a domain', function (): void {
 
     $mock->assertSent(function (SetRegLock $request): bool {
         return $request->query()->get('RegLock') === '0';
-    });
-});
-
-it('gets auto renew status', function (): void {
-    $mock = new MockClient([
-        GetRenew::class => MockResponse::make('<interface-response><auto_renew>1</auto_renew></interface-response>'),
-    ]);
-
-    Enom::fake($mock);
-
-    expect(Enom::domains()->getAutoRenew('example', 'com'))->toBeTrue();
-});
-
-it('sets auto renew', function (): void {
-    $mock = new MockClient([
-        SetRenew::class => MockResponse::make('<interface-response><RRPCode>200</RRPCode></interface-response>'),
-    ]);
-
-    Enom::fake($mock);
-
-    Enom::domains()->setAutoRenew('example', 'com', true);
-
-    $mock->assertSent(function (SetRenew $request): bool {
-        return $request->query()->get('Command') === 'SetRenew'
-            && $request->query()->get('AutoRenew') === '1';
     });
 });
 

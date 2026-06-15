@@ -17,13 +17,11 @@ use Sensson\Enom\Requests\Dnssec\GetDnsSec;
 use Sensson\Enom\Requests\Domains\GetAuthCode;
 use Sensson\Enom\Requests\Domains\GetDomain;
 use Sensson\Enom\Requests\Domains\GetRegLock;
-use Sensson\Enom\Requests\Domains\GetRenew;
 use Sensson\Enom\Requests\Domains\ListDomains;
 use Sensson\Enom\Requests\Domains\PushDomain;
 use Sensson\Enom\Requests\Domains\RegisterDomain;
 use Sensson\Enom\Requests\Domains\RenewDomain;
 use Sensson\Enom\Requests\Domains\SetRegLock;
-use Sensson\Enom\Requests\Domains\SetRenew;
 use Sensson\Enom\Requests\Domains\TransferDomain;
 
 class DomainsResource extends BaseResource
@@ -45,8 +43,7 @@ class DomainsResource extends BaseResource
             sld: $info->sld,
             tld: $info->tld,
             status: $info->status,
-            expiration: $info->expiration,
-            auto_renew: $info->auto_renew,
+            expires_at: $info->expires_at,
             dnssec: $dnssec,
         );
     }
@@ -100,16 +97,6 @@ class DomainsResource extends BaseResource
         $this->connector->send(new SetRegLock(new DomainName($sld, $tld), locked: false));
     }
 
-    public function getAutoRenew(string $sld, string $tld): bool
-    {
-        return $this->connector->send(new GetRenew(new DomainName($sld, $tld)))->dto();
-    }
-
-    public function setAutoRenew(string $sld, string $tld, bool $enabled): void
-    {
-        $this->connector->send(new SetRenew(new DomainName($sld, $tld), $enabled));
-    }
-
     public function getAuthCode(string $sld, string $tld): AuthCode
     {
         return $this->connector->send(new GetAuthCode(new DomainName($sld, $tld)))->dto();
@@ -128,11 +115,6 @@ class DomainsResource extends BaseResource
     public function nameservers(string $sld, string $tld): NameserverResource
     {
         return new NameserverResource($this->connector, new DomainName($sld, $tld));
-    }
-
-    public function dns(string $sld, string $tld): DnsResource
-    {
-        return new DnsResource($this->connector, new DomainName($sld, $tld));
     }
 
     public function transfers(string $sld, string $tld): TransferResource

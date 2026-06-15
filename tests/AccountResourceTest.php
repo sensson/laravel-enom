@@ -19,7 +19,7 @@ it('gets the account balance', function (): void {
 
     expect($result)
         ->toBeInstanceOf(AccountBalance::class)
-        ->balance->toBe(250.0)
+        ->amount->toBe(250.0)
         ->currency->toBe('USD');
 
     $mock->assertSent(function (GetBalance $request): bool {

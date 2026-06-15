@@ -39,10 +39,7 @@ class GetDomain extends EnomRequest
             sld: $this->domain->sld,
             tld: $this->domain->tld,
             status: (string) ($info->status ?? null) ?: null,
-            expiration: (string) ($info->{'expiration-date'} ?? null) ?: null,
-            auto_renew: isset($info->services)
-                ? str((string) $info->services->entry->value)->lower()->toString() === 'yes'
-                : null,
+            expires_at: (string) ($info->{'expiration-date'} ?? null) ?: null,
         );
     }
 }
