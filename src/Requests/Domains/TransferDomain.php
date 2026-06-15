@@ -40,7 +40,7 @@ class TransferDomain extends EnomRequest
         return new DomainTransfer(
             sld: $this->domain->sld,
             tld: $this->domain->tld,
-            status: (string) ($xml->TransferOrder->statusid ?? null) ?: null,
+            status: (string) ($xml->TransferOrder->status ?? null) ?: null,
         );
     }
 }

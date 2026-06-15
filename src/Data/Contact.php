@@ -12,16 +12,16 @@ class Contact extends Data
         public readonly ?string $handle = null,
         public string $first_name = '',
         public string $last_name = '',
-        public string $organization = '',
+        public ?string $organization = null,
         public string $address = '',
+        public ?string $address_2 = null,
         public string $city = '',
-        public string $state = '',
+        public ?string $state = null,
         public string $postal_code = '',
         public string $country = '',
         public string $phone = '',
-        public string $email = '',
-        public ?string $address_2 = null,
         public ?string $fax = null,
+        public string $email = '',
     ) {
         //
     }

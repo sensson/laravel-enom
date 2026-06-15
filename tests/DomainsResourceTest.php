@@ -149,7 +149,7 @@ it('renews a domain', function (): void {
 it('transfers a domain', function (): void {
     $mock = new MockClient([
         TransferDomain::class => MockResponse::make(
-            '<interface-response><OrderID>12345</OrderID><TransferOrder><statusid>1</statusid></TransferOrder></interface-response>'
+            '<interface-response><OrderID>12345</OrderID><TransferOrder><status>Pending</status><statusid>1</statusid></TransferOrder></interface-response>'
         ),
     ]);
 
@@ -160,7 +160,7 @@ it('transfers a domain', function (): void {
     expect($result)
         ->toBeInstanceOf(DomainTransfer::class)
         ->name()->toBe('example.com')
-        ->status->toBe('1');
+        ->status->toBe('Pending');
 
     $mock->assertSent(function (TransferDomain $request): bool {
         return $request->query()->get('Command') === 'TP_CreateOrder'
