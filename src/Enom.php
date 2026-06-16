@@ -79,13 +79,21 @@ class Enom extends Connector
     {
         $xml = $response->xml();
 
-        if (! isset($xml->errors)) {
-            return null;
+        if (isset($xml->errors)) {
+            $message = collect($xml->errors->children())
+                ->map(fn (SimpleXMLElement $error): string => trim((string) $error))
+                ->filter()
+                ->implode('; ');
+
+            if ($message !== '') {
+                return $message;
+            }
         }
 
-        return collect($xml->errors->children())
-            ->map(fn (SimpleXMLElement $error): string => trim((string) $error))
-            ->filter()
-            ->implode('; ') ?: null;
+        if (isset($xml->Success) && strtolower((string) $xml->Success) === 'false') {
+            return trim((string) $xml->DnsSecData->Result->ResponseMessage) ?: 'The request failed.';
+        }
+
+        return null;
     }
 }

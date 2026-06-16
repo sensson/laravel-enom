@@ -105,7 +105,7 @@ it('registers a domain with separate contacts', function (): void {
 it('gets domain info including dnssec', function (): void {
     $mock = new MockClient([
         GetDomain::class => MockResponse::make(
-            '<interface-response><GetDomainInfo><status>Registered</status><expiration-date>2026-01-01</expiration-date></GetDomainInfo></interface-response>'
+            '<interface-response><GetDomainInfo><status><registrationstatus>Registered</registrationstatus><expiration>6/16/2027 3:18:00 PM</expiration></status></GetDomainInfo></interface-response>'
         ),
         GetDnsSec::class => MockResponse::make(
             '<interface-response><DnsSecData><KeyData><KeyTag>12345</KeyTag><Algorithm>8</Algorithm><DigestType>2</DigestType><Digest>ABC123</Digest></KeyData></DnsSecData></interface-response>'
@@ -121,7 +121,7 @@ it('gets domain info including dnssec', function (): void {
         ->sld->toBe('example')
         ->tld->toBe('com')
         ->status->toBe('Registered')
-        ->expires_at->toBe('2026-01-01')
+        ->expires_at->toBe('6/16/2027 3:18:00 PM')
         ->dnssec->toHaveCount(1);
 
     expect($result->dnssec[0])
@@ -252,7 +252,7 @@ it('locks a domain', function (): void {
 
     $mock->assertSent(function (SetRegLock $request): bool {
         return $request->query()->get('Command') === 'SetRegLock'
-            && $request->query()->get('RegLock') === '1';
+            && $request->query()->get('UnlockRegistrar') === '0';
     });
 });
 
@@ -266,7 +266,7 @@ it('unlocks a domain', function (): void {
     Enom::domains()->unlock('example', 'com');
 
     $mock->assertSent(function (SetRegLock $request): bool {
-        return $request->query()->get('RegLock') === '0';
+        return $request->query()->get('UnlockRegistrar') === '1';
     });
 });
 

@@ -16,52 +16,52 @@ it('gets contacts for a domain', function (): void {
     <interface-response>
         <GetContacts>
             <Registrant>
-                <FirstName>John</FirstName>
-                <LastName>Doe</LastName>
-                <OrganizationName>Acme</OrganizationName>
-                <Address1>123 Main St</Address1>
-                <City>Springfield</City>
-                <StateProvince>IL</StateProvince>
-                <PostalCode>62701</PostalCode>
-                <Country>US</Country>
-                <Phone>+1.5551234567</Phone>
-                <EmailAddress>john@example.com</EmailAddress>
+                <RegistrantFirstName>John</RegistrantFirstName>
+                <RegistrantLastName>Doe</RegistrantLastName>
+                <RegistrantOrganizationName>Acme</RegistrantOrganizationName>
+                <RegistrantAddress1>123 Main St</RegistrantAddress1>
+                <RegistrantCity>Springfield</RegistrantCity>
+                <RegistrantStateProvince>IL</RegistrantStateProvince>
+                <RegistrantPostalCode>62701</RegistrantPostalCode>
+                <RegistrantCountry>US</RegistrantCountry>
+                <RegistrantPhone>+1.5551234567</RegistrantPhone>
+                <RegistrantEmailAddress>john@example.com</RegistrantEmailAddress>
             </Registrant>
             <Admin>
-                <FirstName>Jane</FirstName>
-                <LastName>Doe</LastName>
-                <OrganizationName>Acme</OrganizationName>
-                <Address1>456 Oak Ave</Address1>
-                <City>Springfield</City>
-                <StateProvince>IL</StateProvince>
-                <PostalCode>62701</PostalCode>
-                <Country>US</Country>
-                <Phone>+1.5559876543</Phone>
-                <EmailAddress>jane@example.com</EmailAddress>
+                <AdminFirstName>Jane</AdminFirstName>
+                <AdminLastName>Doe</AdminLastName>
+                <AdminOrganizationName>Acme</AdminOrganizationName>
+                <AdminAddress1>456 Oak Ave</AdminAddress1>
+                <AdminCity>Springfield</AdminCity>
+                <AdminStateProvince>IL</AdminStateProvince>
+                <AdminPostalCode>62701</AdminPostalCode>
+                <AdminCountry>US</AdminCountry>
+                <AdminPhone>+1.5559876543</AdminPhone>
+                <AdminEmailAddress>jane@example.com</AdminEmailAddress>
             </Admin>
             <Tech>
-                <FirstName>John</FirstName>
-                <LastName>Doe</LastName>
-                <OrganizationName>Acme</OrganizationName>
-                <Address1>123 Main St</Address1>
-                <City>Springfield</City>
-                <StateProvince>IL</StateProvince>
-                <PostalCode>62701</PostalCode>
-                <Country>US</Country>
-                <Phone>+1.5551234567</Phone>
-                <EmailAddress>john@example.com</EmailAddress>
+                <TechFirstName>John</TechFirstName>
+                <TechLastName>Doe</TechLastName>
+                <TechOrganizationName>Acme</TechOrganizationName>
+                <TechAddress1>123 Main St</TechAddress1>
+                <TechCity>Springfield</TechCity>
+                <TechStateProvince>IL</TechStateProvince>
+                <TechPostalCode>62701</TechPostalCode>
+                <TechCountry>US</TechCountry>
+                <TechPhone>+1.5551234567</TechPhone>
+                <TechEmailAddress>john@example.com</TechEmailAddress>
             </Tech>
             <AuxBilling>
-                <FirstName>John</FirstName>
-                <LastName>Doe</LastName>
-                <OrganizationName>Acme</OrganizationName>
-                <Address1>123 Main St</Address1>
-                <City>Springfield</City>
-                <StateProvince>IL</StateProvince>
-                <PostalCode>62701</PostalCode>
-                <Country>US</Country>
-                <Phone>+1.5551234567</Phone>
-                <EmailAddress>john@example.com</EmailAddress>
+                <AuxBillingFirstName>John</AuxBillingFirstName>
+                <AuxBillingLastName>Doe</AuxBillingLastName>
+                <AuxBillingOrganizationName>Acme</AuxBillingOrganizationName>
+                <AuxBillingAddress1>123 Main St</AuxBillingAddress1>
+                <AuxBillingCity>Springfield</AuxBillingCity>
+                <AuxBillingStateProvince>IL</AuxBillingStateProvince>
+                <AuxBillingPostalCode>62701</AuxBillingPostalCode>
+                <AuxBillingCountry>US</AuxBillingCountry>
+                <AuxBillingPhone>+1.5551234567</AuxBillingPhone>
+                <AuxBillingEmailAddress>john@example.com</AuxBillingEmailAddress>
             </AuxBilling>
         </GetContacts>
     </interface-response>

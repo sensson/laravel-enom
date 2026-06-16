@@ -27,6 +27,8 @@ class GetAuthCode extends EnomRequest
         return [
             'SLD' => $this->domain->sld,
             'TLD' => $this->domain->tld,
+            'EmailEPP' => 'True',
+            'RunSynchAutoInfo' => 'True',
         ];
     }
 

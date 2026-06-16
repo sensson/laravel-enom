@@ -28,7 +28,7 @@ class SetRegLock extends EnomRequest
         return [
             'SLD' => $this->domain->sld,
             'TLD' => $this->domain->tld,
-            'RegLock' => $this->locked ? '1' : '0',
+            'UnlockRegistrar' => $this->locked ? '0' : '1',
         ];
     }
 
