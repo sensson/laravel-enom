@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Illuminate\Support\Collection;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
 use Sensson\Enom\Data\TransferOrder;
@@ -72,10 +73,10 @@ it('gets transfer orders for a domain', function (): void {
 
     Enom::fake($mock);
 
-    $result = Enom::domains()->transfers()->list('example', 'com');
+    $result = Enom::domains()->transfers()->all('example', 'com');
 
     expect($result)
-        ->toBeArray()
+        ->toBeInstanceOf(Collection::class)
         ->toHaveCount(2);
 
     expect($result[0])

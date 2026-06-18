@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Sensson\Enom\Resources;
 
+use Illuminate\Support\Collection;
 use Saloon\Http\BaseResource;
 use Sensson\Enom\Data\AuthCode;
 use Sensson\Enom\Data\Contact;
@@ -26,10 +27,10 @@ use Sensson\Enom\Requests\Domains\TransferDomain;
 
 class DomainsResource extends BaseResource
 {
-    /** @return array<string> */
-    public function list(): array
+    /** @return Collection<int, string> */
+    public function all(): Collection
     {
-        return $this->connector->send(new ListDomains)->dto();
+        return collect($this->connector->send(new ListDomains)->dto());
     }
 
     public function get(string $sld, string $tld): Domain

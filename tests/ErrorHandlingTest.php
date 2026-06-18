@@ -20,7 +20,7 @@ it('throws on an in-body error response (HTTP 200 with ErrCount)', function (): 
 
     Enom::fake($mock);
 
-    Enom::domains()->list();
+    Enom::domains()->all();
 })->throws(ApiException::class, 'Domain name not available for processing');
 
 it('maps invalid credentials to an authentication exception', function (): void {
@@ -32,7 +32,7 @@ it('maps invalid credentials to an authentication exception', function (): void 
 
     Enom::fake($mock);
 
-    Enom::domains()->list();
+    Enom::domains()->all();
 })->throws(AuthenticationException::class);
 
 it('throws on a dnssec failure reported via Success=False', function (): void {

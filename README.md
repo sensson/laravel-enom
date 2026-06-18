@@ -43,7 +43,7 @@ failure, so a normal return means the registry confirmed success.
 use Sensson\Enom\Facades\Enom;
 
 $domain = Enom::domains()->get('example', 'com');   // status, expires_at, dnssec
-$domains = Enom::domains()->list();
+$domains = Enom::domains()->all();
 Enom::domains()->renew('example', 'com', years: 2);
 ```
 
@@ -162,7 +162,7 @@ Removing a record requires all four values to match what is set at the registry,
 List all transfer orders for a domain, or look up and cancel an order by its id:
 
 ```php
-$orders = Enom::domains()->transfers()->list('example', 'com');
+$orders = Enom::domains()->transfers()->all('example', 'com');
 
 $order = Enom::domains()->transfers()->get('12345');
 Enom::domains()->transfers()->cancel('12345');
@@ -184,9 +184,9 @@ Define extra connections in `config/enom.php` and select one by name, or supply 
 ```php
 use Sensson\Enom\Data\Connection;
 
-Enom::connection('reseller2')->domains()->list();
+Enom::connection('reseller2')->domains()->all();
 
-Enom::build(new Connection('username', 'token', sandbox: false))->domains()->list();
+Enom::build(new Connection('username', 'token', sandbox: false))->domains()->all();
 ```
 
 ## Testing
@@ -205,7 +205,7 @@ $mock = new MockClient([
 
 Enom::fake($mock);
 
-Enom::domains()->list();
+Enom::domains()->all();
 
 $mock->assertSent(ListDomains::class);
 ```
