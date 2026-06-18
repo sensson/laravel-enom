@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Illuminate\Support\Collection;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
 use Sensson\Enom\Data\Nameserver;
@@ -29,9 +30,9 @@ it('gets nameservers for a domain', function (): void {
 
     $result = Enom::domains()->nameservers()->get('example', 'com');
 
-    expect($result)->toBeArray()->toHaveCount(2);
+    expect($result)->toBeInstanceOf(Collection::class)->toHaveCount(2);
     expect($result[0])->toBeInstanceOf(Nameserver::class);
-    expect(array_map(fn (Nameserver $nameserver): string => $nameserver->host, $result))
+    expect($result->map(fn (Nameserver $nameserver): string => $nameserver->host))
         ->toContain('ns1.example.com')
         ->toContain('ns2.example.com');
 
@@ -54,8 +55,8 @@ it('updates nameservers for a domain', function (): void {
         new Nameserver('ns2.myhost.com'),
     ]);
 
-    expect($result)->toBeArray();
-    expect(array_map(fn (Nameserver $nameserver): string => $nameserver->host, $result))
+    expect($result)->toBeInstanceOf(Collection::class);
+    expect($result->map(fn (Nameserver $nameserver): string => $nameserver->host))
         ->toContain('ns1.myhost.com')
         ->toContain('ns2.myhost.com');
 

@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Illuminate\Support\Collection;
 use Saloon\Http\Faking\MockClient;
 use Saloon\Http\Faking\MockResponse;
 use Sensson\Enom\Data\AuthCode;
@@ -220,8 +221,8 @@ it('lists all domains', function (): void {
 
     Enom::fake($mock);
 
-    expect(Enom::domains()->list())
-        ->toBeArray()
+    expect(Enom::domains()->all())
+        ->toBeInstanceOf(Collection::class)
         ->toHaveCount(2)
         ->toContain('example.com');
 });
