@@ -10,7 +10,7 @@ use Sensson\Enom\Requests\Account\GetBalance;
 
 it('gets the account balance', function (): void {
     $mock = new MockClient([
-        GetBalance::class => MockResponse::make('<interface-response><balance>250.00</balance><currency>USD</currency></interface-response>'),
+        GetBalance::class => MockResponse::make('<interface-response><Balance>50,000.00</Balance><AvailableBalance>50,700.00</AvailableBalance></interface-response>'),
     ]);
 
     Enom::fake($mock);
@@ -19,7 +19,7 @@ it('gets the account balance', function (): void {
 
     expect($result)
         ->toBeInstanceOf(AccountBalance::class)
-        ->amount->toBe(250.0)
+        ->amount->toBe(50000.0)
         ->currency->toBe('USD');
 
     $mock->assertSent(function (GetBalance $request): bool {
@@ -29,7 +29,7 @@ it('gets the account balance', function (): void {
 
 it('validates the connection with test', function (): void {
     $mock = new MockClient([
-        GetBalance::class => MockResponse::make('<interface-response><balance>250.00</balance><currency>USD</currency></interface-response>'),
+        GetBalance::class => MockResponse::make('<interface-response><Balance>50,000.00</Balance><AvailableBalance>50,700.00</AvailableBalance></interface-response>'),
     ]);
 
     Enom::fake($mock);

@@ -38,8 +38,8 @@ class GetDomain extends EnomRequest
         return new Domain(
             sld: $this->domain->sld,
             tld: $this->domain->tld,
-            status: (string) ($info->status ?? null) ?: null,
-            expires_at: (string) ($info->{'expiration-date'} ?? null) ?: null,
+            status: (string) ($info->status->registrationstatus ?? null) ?: null,
+            expires_at: (string) ($info->status->expiration ?? null) ?: null,
         );
     }
 }

@@ -46,19 +46,21 @@ class GetContacts extends EnomRequest
 
     protected function parseContact(SimpleXMLElement $node): Contact
     {
+        $prefix = $node->getName();
+
         return new Contact(
-            first_name: (string) $node->FirstName,
-            last_name: (string) $node->LastName,
-            organization: (string) $node->OrganizationName,
-            address: (string) $node->Address1,
-            city: (string) $node->City,
-            state: (string) $node->StateProvince,
-            postal_code: (string) $node->PostalCode,
-            country: (string) $node->Country,
-            phone: (string) $node->Phone,
-            email: (string) $node->EmailAddress,
-            address_2: (string) ($node->Address2 ?? null) ?: null,
-            fax: (string) ($node->Fax ?? null) ?: null,
+            first_name: (string) $node->{"{$prefix}FirstName"},
+            last_name: (string) $node->{"{$prefix}LastName"},
+            organization: (string) $node->{"{$prefix}OrganizationName"},
+            address: (string) $node->{"{$prefix}Address1"},
+            city: (string) $node->{"{$prefix}City"},
+            state: (string) $node->{"{$prefix}StateProvince"},
+            postal_code: (string) $node->{"{$prefix}PostalCode"},
+            country: (string) $node->{"{$prefix}Country"},
+            phone: (string) $node->{"{$prefix}Phone"},
+            email: (string) $node->{"{$prefix}EmailAddress"},
+            address_2: (string) ($node->{"{$prefix}Address2"} ?? null) ?: null,
+            fax: (string) ($node->{"{$prefix}Fax"} ?? null) ?: null,
         );
     }
 }
