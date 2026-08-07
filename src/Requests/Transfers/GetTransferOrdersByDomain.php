@@ -38,11 +38,12 @@ class GetTransferOrdersByDomain extends EnomRequest
 
         foreach ($xml->TransferOrder ?? [] as $order) {
             $orders[] = new TransferOrder(
-                order: (string) $order->OrderID,
+                order: $this->field($order, 'transferorderid', 'OrderID') ?? '',
                 sld: $this->domain->sld,
                 tld: $this->domain->tld,
-                status: (string) ($order->status ?? null) ?: null,
-                status_id: (string) ($order->statusid ?? null) ?: null,
+                status: $this->field($order, 'orderstatus', 'status'),
+                status_id: $this->field($order, 'statusid'),
+                ordered_at: $this->field($order, 'orderdate'),
             );
         }
 

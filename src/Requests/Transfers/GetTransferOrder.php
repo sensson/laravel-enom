@@ -33,11 +33,12 @@ class GetTransferOrder extends EnomRequest
         $xml = $response->xml()->TP_GetOrder->TransferOrder;
 
         return new TransferOrder(
-            order: (string) $xml->OrderID,
+            order: $this->field($xml, 'OrderID', 'transferorderid') ?? '',
             sld: (string) $xml->SLD,
             tld: (string) $xml->TLD,
-            status: (string) ($xml->status ?? null) ?: null,
-            status_id: (string) ($xml->statusid ?? null) ?: null,
+            status: $this->field($xml, 'status', 'orderstatus'),
+            status_id: $this->field($xml, 'statusid'),
+            ordered_at: $this->field($xml, 'orderdate'),
         );
     }
 }

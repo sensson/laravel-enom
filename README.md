@@ -168,6 +168,21 @@ $order = Enom::domains()->transfers()->get('12345');
 Enom::domains()->transfers()->cancel('12345');
 ```
 
+Enom does not guarantee the order in which transfer orders are returned. Use `latest()` to get the most
+recent order — selected by its order date — or `null` when the domain has no transfer orders:
+
+```php
+$order = Enom::domains()->transfers()->latest('example', 'com');
+
+$order?->orderedAt(); // CarbonImmutable|null
+```
+
+Latest means newest, not active: the newest order may well be a completed or cancelled one. Orders
+without a parseable date are considered older than any dated order; when no order has a date, `latest()`
+falls back to the last order as returned by Enom. `orderedAt()` parses the timestamp exactly as Enom
+returns it — in Enom's own timezone, not UTC — so treat it as a wall-clock value rather than an absolute
+instant.
+
 ### Account
 
 ```php
