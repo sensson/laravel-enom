@@ -22,6 +22,17 @@ class TransferResource extends BaseResource
         return collect($this->connector->send(new GetTransferOrdersByDomain(new DomainName($sld, $tld)))->dto());
     }
 
+    public function latest(string $sld, string $tld): ?TransferOrder
+    {
+        // Orders without a parseable date sort first (PHP_INT_MIN), so the
+        // stable sort keeps them in response order and a dated order always
+        // wins. Not interchangeable with sortByDesc()->first(): on ties that
+        // would return the first response item instead of the last.
+        return $this->all($sld, $tld)
+            ->sortBy(fn (TransferOrder $order): int => $order->orderedAt()?->getTimestamp() ?? PHP_INT_MIN)
+            ->last();
+    }
+
     public function get(string $order): TransferOrder
     {
         return $this->connector->send(new GetTransferOrder($order))->dto();
