@@ -60,11 +60,11 @@ class DomainsResource extends BaseResource
         ?Contact $admin = null,
         ?Contact $tech = null,
         ?Contact $billing = null,
-        int $years = 1,
         array $nameservers = [],
+        int $years = 1,
     ): Domain {
         return $this->connector->send(new RegisterDomain(
-            new DomainName($sld, $tld), $registrant, $admin, $tech, $billing, $years, $nameservers,
+            new DomainName($sld, $tld), $registrant, $admin, $tech, $billing, $nameservers, $years,
         ))->dto();
     }
 

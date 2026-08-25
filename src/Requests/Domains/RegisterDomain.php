@@ -22,8 +22,8 @@ class RegisterDomain extends EnomRequest
         protected ?Contact $admin = null,
         protected ?Contact $tech = null,
         protected ?Contact $billing = null,
-        protected int $years = 1,
         protected array $nameservers = [],
+        protected int $years = 1,
     ) {
         //
     }
