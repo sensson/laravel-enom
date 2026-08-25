@@ -2,6 +2,14 @@
 
 All notable changes to `laravel-enom` will be documented in this file.
 
+## v0.0.2 - 2026-08-25
+
+### What's Changed
+
+* feat: set nameservers during registration by @ju5t in https://github.com/sensson/laravel-enom/pull/12
+
+**Full Changelog**: https://github.com/sensson/laravel-enom/compare/v0.0.1...v0.0.2
+
 ## v0.0.1 - 2026-08-24
 
 ### What's Changed
