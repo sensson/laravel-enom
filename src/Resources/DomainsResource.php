@@ -12,6 +12,7 @@ use Sensson\Enom\Data\Dnssec;
 use Sensson\Enom\Data\Domain;
 use Sensson\Enom\Data\DomainName;
 use Sensson\Enom\Data\DomainTransfer;
+use Sensson\Enom\Data\Nameserver;
 use Sensson\Enom\Requests\Dnssec\AddDnsSec;
 use Sensson\Enom\Requests\Dnssec\DeleteDnsSec;
 use Sensson\Enom\Requests\Dnssec\GetDnsSec;
@@ -49,6 +50,9 @@ class DomainsResource extends BaseResource
         );
     }
 
+    /**
+     * @param  array<Nameserver>  $nameservers
+     */
     public function register(
         string $sld,
         string $tld,
@@ -57,9 +61,10 @@ class DomainsResource extends BaseResource
         ?Contact $tech = null,
         ?Contact $billing = null,
         int $years = 1,
+        array $nameservers = [],
     ): Domain {
         return $this->connector->send(new RegisterDomain(
-            new DomainName($sld, $tld), $registrant, $admin, $tech, $billing, $years,
+            new DomainName($sld, $tld), $registrant, $admin, $tech, $billing, $years, $nameservers,
         ))->dto();
     }
 

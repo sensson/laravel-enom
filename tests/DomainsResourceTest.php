@@ -10,6 +10,7 @@ use Sensson\Enom\Data\Contact;
 use Sensson\Enom\Data\Dnssec;
 use Sensson\Enom\Data\Domain;
 use Sensson\Enom\Data\DomainTransfer;
+use Sensson\Enom\Data\Nameserver;
 use Sensson\Enom\Facades\Enom;
 use Sensson\Enom\Requests\Dnssec\AddDnsSec;
 use Sensson\Enom\Requests\Dnssec\DeleteDnsSec;
@@ -44,18 +45,24 @@ it('registers a domain', function (): void {
         email: 'john@example.com',
     );
 
-    $result = Enom::domains()->register('example', 'com', $contact, years: 2);
+    $result = Enom::domains()->register('example', 'com', $contact, years: 2, nameservers: [
+        new Nameserver('ns1.myhost.com'),
+        new Nameserver('ns2.myhost.com'),
+    ]);
 
     expect($result)
         ->toBeInstanceOf(Domain::class)
         ->sld->toBe('example')
-        ->tld->toBe('com');
+        ->tld->toBe('com')
+        ->nameservers->toHaveCount(2);
 
     $mock->assertSent(function (RegisterDomain $request): bool {
         return $request->query()->get('Command') === 'Purchase'
             && $request->query()->get('SLD') === 'example'
             && $request->query()->get('TLD') === 'com'
             && $request->query()->get('NumYears') === 2
+            && $request->query()->get('NS1') === 'ns1.myhost.com'
+            && $request->query()->get('NS2') === 'ns2.myhost.com'
             && $request->query()->get('RegistrantFirstName') === 'John'
             && $request->query()->get('AdminFirstName') === 'John';
     });
@@ -99,7 +106,8 @@ it('registers a domain with separate contacts', function (): void {
     $mock->assertSent(function (RegisterDomain $request): bool {
         return $request->query()->get('RegistrantFirstName') === 'John'
             && $request->query()->get('AdminFirstName') === 'Jane'
-            && $request->query()->get('TechFirstName') === 'John';
+            && $request->query()->get('TechFirstName') === 'John'
+            && $request->query()->get('UseDNS') === 'default';
     });
 });
 

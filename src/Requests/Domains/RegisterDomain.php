@@ -8,10 +8,14 @@ use Saloon\Http\Response;
 use Sensson\Enom\Data\Contact;
 use Sensson\Enom\Data\Domain;
 use Sensson\Enom\Data\DomainName;
+use Sensson\Enom\Data\Nameserver;
 use Sensson\Enom\Requests\EnomRequest;
 
 class RegisterDomain extends EnomRequest
 {
+    /**
+     * @param  array<Nameserver>  $nameservers
+     */
     public function __construct(
         protected DomainName $domain,
         protected Contact $registrant,
@@ -19,6 +23,7 @@ class RegisterDomain extends EnomRequest
         protected ?Contact $tech = null,
         protected ?Contact $billing = null,
         protected int $years = 1,
+        protected array $nameservers = [],
     ) {
         //
     }
@@ -34,6 +39,12 @@ class RegisterDomain extends EnomRequest
         $tech = $this->tech ?? $this->registrant;
         $billing = $this->billing ?? $this->registrant;
 
+        $nameservers = collect(array_values($this->nameservers))
+            ->mapWithKeys(fn (Nameserver $nameserver, int $index): array => [
+                'NS'.($index + 1) => $nameserver->host,
+            ])
+            ->whenEmpty(fn ($parameters) => $parameters->put('UseDNS', 'default'));
+
         return collect([
             'SLD' => $this->domain->sld,
             'TLD' => $this->domain->tld,
@@ -43,6 +54,7 @@ class RegisterDomain extends EnomRequest
             ->merge($admin->toQueryParams('Admin'))
             ->merge($tech->toQueryParams('Tech'))
             ->merge($billing->toQueryParams('AuxBilling'))
+            ->merge($nameservers)
             ->all();
     }
 
@@ -51,6 +63,7 @@ class RegisterDomain extends EnomRequest
         return new Domain(
             sld: $this->domain->sld,
             tld: $this->domain->tld,
+            nameservers: $this->nameservers,
         );
     }
 }
