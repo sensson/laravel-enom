@@ -51,6 +51,7 @@ Enom::domains()->renew('example', 'com', years: 2);
 
 ```php
 use Sensson\Enom\Data\Contact;
+use Sensson\Enom\Data\Nameserver;
 
 $contact = new Contact(
     first_name: 'John',
@@ -65,7 +66,10 @@ $contact = new Contact(
     email: 'john@example.com',
 );
 
-Enom::domains()->register('example', 'com', $contact);
+Enom::domains()->register('example', 'com', $contact, nameservers: [
+    new Nameserver('ns1.example.com'),
+    new Nameserver('ns2.example.com'),
+]);
 ```
 
 You can provide separate contacts for admin, tech, and billing. If omitted, the registrant contact is used
