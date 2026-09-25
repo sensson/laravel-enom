@@ -2,6 +2,15 @@
 
 All notable changes to `laravel-enom` will be documented in this file.
 
+## v0.0.3 - 2026-09-25
+
+### What's Changed
+
+* chore(deps): update saloonphp/laravel-plugin requirement from ^4.0 to ^5.0 by @dependabot[bot] in https://github.com/sensson/laravel-enom/pull/13
+* chore: require laravel 12.39 or higher by @ju5t in https://github.com/sensson/laravel-enom/pull/14
+
+**Full Changelog**: https://github.com/sensson/laravel-enom/compare/v0.0.2...v0.0.3
+
 ## v0.0.2 - 2026-08-25
 
 ### What's Changed
