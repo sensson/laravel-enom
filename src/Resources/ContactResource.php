@@ -20,8 +20,13 @@ class ContactResource extends BaseResource
         return $this->connector->send(new GetContacts(new DomainName($sld, $tld)))->dto();
     }
 
-    public function update(string $sld, string $tld, Type $type, Contact $contact): Response
+    public function update(string $sld, string $tld, Type $type, Contact $contact, bool $optOutOfTransferLock = false): Response
     {
-        return $this->connector->send(new UpdateContacts(new DomainName($sld, $tld), $type, $contact));
+        return $this->connector->send(new UpdateContacts(
+            domain: new DomainName($sld, $tld),
+            type: $type,
+            contact: $contact,
+            optOutOfTransferLock: $optOutOfTransferLock,
+        ));
     }
 }

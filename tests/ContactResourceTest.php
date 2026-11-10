@@ -121,6 +121,42 @@ it('updates a registrant contact', function (): void {
     });
 });
 
+it('opts out of the transfer lock when the registrant changes', function (): void {
+    $mock = new MockClient([
+        UpdateContacts::class => MockResponse::make('<interface-response><RRPCode>200</RRPCode></interface-response>'),
+    ]);
+
+    Enom::fake($mock);
+
+    Enom::domains()->contacts()->update('example', 'com', Type::Registrant, new Contact(first_name: 'John'), optOutOfTransferLock: true);
+
+    $mock->assertSent(fn (UpdateContacts $request): bool => $request->query()->get('IRTPOptOut') === 'True');
+});
+
+it('keeps the transfer lock by default', function (): void {
+    $mock = new MockClient([
+        UpdateContacts::class => MockResponse::make('<interface-response><RRPCode>200</RRPCode></interface-response>'),
+    ]);
+
+    Enom::fake($mock);
+
+    Enom::domains()->contacts()->update('example', 'com', Type::Registrant, new Contact(first_name: 'John'));
+
+    $mock->assertSent(fn (UpdateContacts $request): bool => $request->query()->get('IRTPOptOut') === null);
+});
+
+it('only opts out of the transfer lock for the registrant', function (): void {
+    $mock = new MockClient([
+        UpdateContacts::class => MockResponse::make('<interface-response><RRPCode>200</RRPCode></interface-response>'),
+    ]);
+
+    Enom::fake($mock);
+
+    Enom::domains()->contacts()->update('example', 'com', Type::Admin, new Contact(first_name: 'Jane'), optOutOfTransferLock: true);
+
+    $mock->assertSent(fn (UpdateContacts $request): bool => $request->query()->get('IRTPOptOut') === null);
+});
+
 it('updates a tech contact', function (): void {
     $mock = new MockClient([
         UpdateContacts::class => MockResponse::make('<interface-response><RRPCode>200</RRPCode></interface-response>'),
