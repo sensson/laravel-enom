@@ -2,6 +2,14 @@
 
 All notable changes to `laravel-enom` will be documented in this file.
 
+## v0.0.4 - 2026-11-10
+
+### What's Changed
+
+* feat: opt out of the registrant transfer lock by @ju5t in https://github.com/sensson/laravel-enom/pull/16
+
+**Full Changelog**: https://github.com/sensson/laravel-enom/compare/v0.0.3...v0.0.4
+
 ## v0.0.3 - 2026-09-25
 
 ### What's Changed
