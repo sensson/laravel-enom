@@ -126,6 +126,14 @@ Enom::domains()->contacts()->update('example', 'com', Type::Admin, $contact);
 
 Available contact types: `Type::Registrant`, `Type::Admin`, `Type::Tech`, `Type::Billing`.
 
+A material change of the registrant of a gTLD domain triggers the ICANN 60-day transfer lock. The registrant can opt out of that lock with the change:
+
+```php
+Enom::domains()->contacts()->update('example', 'com', Type::Registrant, $contact, optOutOfTransferLock: true);
+```
+
+The opt-out is only sent for the registrant contact.
+
 ### Nameservers
 
 ```php

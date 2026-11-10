@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Sensson\Enom\Requests\Contacts;
 
+use Illuminate\Support\Collection;
 use Sensson\Enom\Data\Contact;
 use Sensson\Enom\Data\DomainName;
 use Sensson\Enom\Enums\Type;
@@ -15,6 +16,7 @@ class UpdateContacts extends EnomRequest
         protected DomainName $domain,
         protected Type $type,
         protected Contact $contact,
+        protected bool $optOutOfTransferLock = false,
     ) {
         //
     }
@@ -32,6 +34,10 @@ class UpdateContacts extends EnomRequest
             'Type' => $this->type->value,
         ])
             ->merge($this->contact->toQueryParams($this->type->value))
+            ->when(
+                $this->optOutOfTransferLock && $this->type === Type::Registrant,
+                fn (Collection $parameters): Collection => $parameters->put('IRTPOptOut', 'True'),
+            )
             ->all();
     }
 }
